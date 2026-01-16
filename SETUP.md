@@ -9,10 +9,17 @@ Follow the detailed instructions at:
 
 ## 02: Set Up Project (Once Per Project)
 
-Open a terminal and run:
+Fork this repo into your GitHub account.
+In your repo Settings:
+
+-  Go to Pages tab / Enable GitHub Pages / Build and deployment / set Source to **GitHub Actions**
+-  Go to Advanced Security tab / Dependabot / Dependabot security updates / **Enable**
+-  And Advanced Security tab / Dependabot / Grouped security updates / **Enable**
+
+Open a machine terminal to the folder where you store your **Repos**, and run:
 
 ```shell
-git clone https://github.com/YOURACCOUNT/toy-gpt-train
+git clone https://github.com/YOURACCOUNT/train-100-unigram
 cd train-100-unigram
 code .
 ```
@@ -85,4 +92,4 @@ See detailed instructions and troubleshooting at:
 
 ## Resources
 
-- [Pro-Analytics-02](<[./docs/pro-tips.md](https://denisecase.github.io/pro-analytics-02/)>) - guide to professional Python
+- [Pro-Analytics-02](https://denisecase.github.io/pro-analytics-02/) - guide to professional Python
