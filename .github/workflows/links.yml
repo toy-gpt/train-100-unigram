@@ -20,33 +20,29 @@ concurrency:
   group: link-check-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read # WHY: Needed to checkout code.
-  issues: write # WHY: Needed to create issue on scheduled failures.
-  pull-requests: write # WHY: Needed to comment on PR if links broken.
-
-env:
-  PYTHONUNBUFFERED: "1" # WHY: Real-time logging.
-  PYTHONIOENCODING: "utf-8" # WHY: Ensure UTF-8 encoding for international characters.
-  REPORT_FAILURES: "true" # WHY: Enable PR comments and scheduled issues for link failures.
-
 jobs:
   lychee:
     name: Link checks
     runs-on: ubuntu-latest # WHY: Linux environment matches most production deployments
     timeout-minutes: 20 # WHY: Prevent hanging jobs. If over time, likely stuck.
 
+    permissions:
+      contents: read # WHY: Needed to checkout code.
+      issues: write # WHY: Needed to create issue on scheduled failures.
+      pull-requests: write # WHY: Needed to comment on PR if links broken.
+
     steps:
       - name: 1) Checkout repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6 # OBS: v6 current as of Dec 2025
 
       - name: 2) Check links with Lychee
         id: lychee
-        uses: lycheeverse/lychee-action@v2.7.0
+        uses: lycheeverse/lychee-action@v2
         with:
           # WHY: Do not hard-fail this step; always run reporting steps.
-          # Instead, fail the job explicitly at the end if exit_code != 0.
           fail: false
+          # WHY: Write results to file for job summary.
+          output: ./lychee-report.md
           args: >
             --config lychee.toml
             --user-agent "${{ github.repository }}/lychee"
@@ -56,11 +52,23 @@ jobs:
             './**/*.tex'
             './**/*.yml'
             './**/*.yaml'
+          lycheeVersion: latest # OBS: Always use latest lychee release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 3) Comment on PR if links broken
-        if: steps.lychee.outputs.exit_code != 0 && github.event_name == 'pull_request' && env.REPORT_FAILURES == 'true'
+      - name: 3) Add results to job summary
+        # WHY: Always show results table, even on success.
+        if: always()
+        run: |
+          echo "## Link Check Report" >> $GITHUB_STEP_SUMMARY
+          if [ -f ./lychee-report.md ]; then
+            cat ./lychee-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No report generated." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 4) Comment on PR if links broken
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name == 'pull_request'
         uses: actions/github-script@v8
         with:
           script: |
@@ -70,7 +78,6 @@ jobs:
               "",
               `Some links appear broken. Check the workflow logs: ${runUrl}`,
             ].join("\n");
-
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -78,39 +85,36 @@ jobs:
               body: comment,
             });
 
-      - name: 4) Create issue for scheduled failures
-        # WHY: Track broken links found during scheduled checks
-        # OBS: Only creates issue if none already open with 'broken-links' label
-        if: steps.lychee.outputs.exit_code != 0 && github.event_name == 'schedule' && env.REPORT_FAILURES == 'true'
+      - name: 5) Create issue for scheduled failures
+        # WHY: Track broken links found during scheduled checks.
+        # OBS: Only creates issue if none already open with 'broken-links' label.
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name == 'schedule'
         uses: actions/github-script@v8
         with:
           script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
             const date = new Date().toISOString().split("T")[0];
             const title = `Link Check Failed - ${date}`;
             const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`;
             const body = `Monthly link check found broken links.\n\nWorkflow logs: ${runUrl}`;
-
             const existing = await github.rest.issues.listForRepo({
-              owner,
-              repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               labels: "broken-links",
               state: "open",
               per_page: 1,
             });
-
             if (existing.data.length === 0) {
               await github.rest.issues.create({
-                owner,
-                repo,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 title,
                 body,
                 labels: ["maintenance", "broken-links"],
               });
             }
 
-      - name: 5) Fail job if broken links were found
+      - name: 6) Fail job if broken links were found
+        # WHY: Explicit failure after reporting ensures visibility of issues.
         if: steps.lychee.outputs.exit_code != 0
         run: |
           echo "Lychee found broken links (exit_code != 0). Failing workflow."
