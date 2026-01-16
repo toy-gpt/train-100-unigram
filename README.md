@@ -1,6 +1,6 @@
 # Toy-GPT: train-100-unigram
 
-[![PyPI version](https://img.shields.io/pypi/v/train-100-unigram)](https://pypi.org/project/train-100-unigram/)
+[![PyPI version](https://img.shields.io/pypi/v/toy-gpt-train-100-unigram)](https://pypi.org/project/toy-gpt-train-100-unigram/)
 [![Latest Release](https://img.shields.io/github/v/release/toy-gpt/train-100-unigram)](https://github.com/toy-gpt/train-100-unigram/releases)
 [![Docs](https://img.shields.io/badge/docs-live-blue)](https://toy-gpt.github.io/train-100-unigram/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/MIT)
