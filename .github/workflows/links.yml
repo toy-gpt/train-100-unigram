@@ -1,35 +1,44 @@
 # ============================================================
 # .github/workflows/links.yml (Lychee Link Checker)
 # ============================================================
+# SOURCE: https://github.com/denisecase/templates
+#
+# WHY-FILE: Automated link checking.
+# OBS: Behavior is configured in lychee.toml in this repository.
+# OBS: Runs on pull requests and monthly on schedule; manual trigger always available.
+# OBS: This workflow always publishes a report table to the job summary.
+# OBS: This workflow marks the run as failed (not green) when broken links are found.
 
 name: Check Links
 
 on:
-  workflow_dispatch:
-  pull_request:
+  workflow_dispatch: # WHY: Manual trigger - always available
+  pull_request: # WHY: Validates PR links before merge
   schedule:
-    - cron: "0 6 1 * *"
+    - cron: "0 6 1 * *" # WHY: Runs monthly (1st of month)
 
 concurrency:
+  # WHY: Prevent multiple simultaneous link checks on same ref
   group: link-check-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   lychee:
     name: Link checks
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+    runs-on: ubuntu-latest # WHY: Stable runner for lychee-action + bash steps.
+    timeout-minutes: 20 # WHY: Prevent hanging jobs.
 
     permissions:
-      contents: read
-      issues: write
-      pull-requests: write
+      contents: read # WHY: Needed to checkout code.
+      issues: write # WHY: Needed to create issue on scheduled failures.
+      pull-requests: write # WHY: Needed to comment on PR if links broken.
 
     steps:
       - name: 1) Checkout repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6 # OBS: Keep current major.
 
       - name: 2) Initialize report file (placeholder)
+        # WHY: Ensure the job summary always has a table, even if Lychee crashes early.
         run: |
           cat > ./lychee-report.md << 'EOF'
           ## Lychee report
@@ -38,12 +47,13 @@ jobs:
 
       - name: 3) Check links with Lychee
         id: lychee
+        # WHY: Keep running summary/comment/issue steps even if Lychee finds failures.
         continue-on-error: true
         uses: lycheeverse/lychee-action@v2.7.0
         with:
-          # Keep fail=false so the action itself doesn't hard-fail the step,
-          # we'll decide final status in the "gate" step.
+          # WHY: Do not hard-fail inside the action; decide final status in the gate step.
           fail: false
+          # WHY: Write a markdown report that we can publish into the job summary.
           output: ./lychee-report.md
           args: >
             --config lychee.toml
@@ -54,11 +64,14 @@ jobs:
             './**/*.tex'
             './**/*.yml'
             './**/*.yaml'
+          # OBS: Always use latest Lychee release.
           lycheeVersion: latest
         env:
+          # WHY: Allows Lychee to authenticate to GitHub when checking links.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 4) Add results to job summary
+        # WHY: Always show results table, even on success or when Lychee had issues.
         if: always()
         run: |
           echo "## Link Check Report" >> "$GITHUB_STEP_SUMMARY"
@@ -71,20 +84,22 @@ jobs:
           echo "Lychee exit code: ${{ steps.lychee.outputs.exit_code }}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: 5) Comment on PR if links broken
+        # WHY: Provide visibility directly on PRs when broken links are detected.
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v8
         with:
           script: |
             const fs = require("fs");
+
             const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`;
             const exitCode = `${{ steps.lychee.outputs.exit_code }}`; // may be empty
             const report = fs.readFileSync("./lychee-report.md", "utf8");
 
-            const looksBroken = (exitCode && exitCode !== "0") || /ERROR|FAIL|Dead link/i.test(report);
+            // WHY: Decide broken-ness from exit code when present; fall back to report text.
+            const looksBroken =
+              (exitCode && exitCode !== "0") || /ERROR|FAIL|Dead link/i.test(report);
 
-            if (!looksBroken) {
-              return;
-            }
+            if (!looksBroken) return;
 
             const body = [
               "## Link Check Results",
@@ -107,17 +122,21 @@ jobs:
             });
 
       - name: 6) Create issue for scheduled failures
+        # WHY: Track broken links found during scheduled checks.
+        # OBS: Only creates issue if none already open with 'broken-links' label.
         if: always() && github.event_name == 'schedule'
         uses: actions/github-script@v8
         with:
           script: |
             const fs = require("fs");
+
             const exitCode = `${{ steps.lychee.outputs.exit_code }}`; // may be empty
             const report = fs.readFileSync("./lychee-report.md", "utf8");
-            const looksBroken = (exitCode && exitCode !== "0") || /ERROR|FAIL|Dead link/i.test(report);
-            if (!looksBroken) {
-              return;
-            }
+
+            const looksBroken =
+              (exitCode && exitCode !== "0") || /ERROR|FAIL|Dead link/i.test(report);
+
+            if (!looksBroken) return;
 
             const date = new Date().toISOString().split("T")[0];
             const title = `Link Check Failed - ${date}`;
@@ -152,14 +171,17 @@ jobs:
             }
 
       - name: 7) Gate fail job if broken links found
+        # WHY: Ensure the overall status is not green when broken links are detected.
         if: always()
         run: |
           code="${{ steps.lychee.outputs.exit_code }}"
+
           if [ -z "$code" ]; then
-            echo "Lychee exit code missing. Marking as failure so status is not green." >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Lychee exit code missing (treating as failure so status is not green)."
             exit 1
           fi
+
           if [ "$code" != "0" ]; then
-            echo "Broken links detected. Marking job as failed so status is not green." >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Broken links detected (lychee exit code $code). See the job summary report."
             exit 1
           fi
