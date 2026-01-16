@@ -78,6 +78,7 @@ Repository = "https://github.com/toy-gpt/train-100-unigram"
 # === DEPTRY (CHECK FOR UNDECLARED OR UNUSED DEPENDENCIES) ===
 
 [tool.deptry.per_rule_ignores]
+DEP001 = ["toy_gpt_train"]
 DEP002 = [
     # === DEV TOOLING (not required at runtime) ===
     "bandit",

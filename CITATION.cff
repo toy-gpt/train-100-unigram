@@ -2,18 +2,12 @@
 # CITATION.cff (How to cite this project)
 # ============================================================
 
-# REQ.UNIVERSAL: Professional open projects SHOULD include CITATION.cff.
-# WHY: Support correct citation and attribution.
-# ALT: Internal or private repositories may omit citation metadata.
-# CUSTOM: Update author, repository, license, and keyword fields as needed.
-# USAGE: See https://citation-file-format.github.io/ for details.
-
 cff-version: "1.2.0"
 type: software
 
-title: "Toy GPT: Unigram Language Model for Text Generation"
-version: "0.1.0"
-date-released: "2026-01-15"
+title: "Toy-GPT: Unigram Next-Token Language Model"
+version: "0.9.0"
+date-released: "2026-01-16"
 
 authors:
   - family-names: Case
@@ -26,45 +20,37 @@ url: "https://github.com/toy-gpt/train-100-unigram"
 license: MIT
 
 abstract: >
-  Introductory data analytics project focused on Python fundamentals,
-  professional project structure, and reproducible workflows.
-  Emphasis is placed on variables, program execution, logging,
-  and documentation within a version-controlled analytics project.
+  Toy-GPT is an educational sequence of minimal language-model training repositories.
+  This repository implements a unigram next-token prediction model trained with
+  softmax and cross-entropy loss. It serves as a baseline for understanding
+  probabilistic language modeling, training loops, and inspectable model artifacts
+  prior to introducing higher-order context, embeddings, or attention mechanisms.
 
 keywords:
-  # identity
-  - data analytics
-  - python
-  - analytics-foundations
-  - introductory-programming
-  - project-based-learning
-  - logging
+  # domain
+  - language-models
+  - natural-language-processing
+  - probabilistic-models
+  - next-token-prediction
 
-  # audience
+  # pedagogy
   - education
+  - computer-science-education
+  - machine-learning-education
   - teaching
   - learning
-  - students
-  - instructors
-  - computer-science-education
-  - data-analytics-education
 
-  # practices
-  - professional-python
-  - src-layout
-  - ci-cd
-  - github-actions
-  - reproducible-workflows
-  - software-quality
-  - professional-practice
+  # methodology
+  - unigram-model
+  - softmax
+  - cross-entropy-loss
+  - gradient-descent
 
-  # tools and ecosystem
+  # software practice
   - python
-  - git
-  - github
+  - reproducible-research
+  - inspectable-artifacts
   - open-source
-  - uv
-  - ruff
-  - mkdocs
+  - github
 
-message: "If using this work, please cite it as described in this file."
+message: "If you use this software in academic or educational work, please cite it using this file."
