@@ -1,0 +1,23 @@
+# ============================================================
+# mkdocs.yaml (MkDocs configuration file)
+# ============================================================
+
+# NOTE: NO LOCAL BUILDING OF DOCUMENTS - mkdocs.base.yaml is kept in the organization.
+# REQ: Use GitHub Actions (in .github/workflows) to build and preview the docs.
+
+# Inherit base configuration from organization-wide template.
+INHERIT: mkdocs.base.yaml
+
+site_name: "Toy-GPT: train-100-unigram"
+site_url: "https://toy-gpt.github.io/train-100-unigram/"
+repo_url: "https://github.com/toy-gpt/train-100-unigram"
+site_description: "Toy-GPT project documentation."
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: "https://github.com/toy-gpt/train-100-unigram"
+
+nav:
+  - Home: index.md
+  - API: api.md

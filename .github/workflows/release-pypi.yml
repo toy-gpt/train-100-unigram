@@ -1,0 +1,145 @@
+# .github/workflows/release.yml
+name: Release (PyPI + versioned docs via mike)
+
+# WHY: Publish a tagged release to PyPI and deploy versioned docs using mike.
+# REQ: Trigger ONLY on version tags like v1.2.3.
+# REQ: PyPI project must be configured for Trusted Publishing (OIDC).
+# REQ: mike requires a gh-pages branch (mike writes versioned docs there).
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # WHY: Trigger on version tags like 'vx.y.z'.
+
+permissions: # WHY: Use least privileges required.
+  contents: write # WHY: Create GitHub Release + push gh-pages for mike
+  id-token: write # WHY: PyPI Trusted Publishing (OIDC)
+
+env:
+  PYTHONUNBUFFERED: "1" # WHY: Real-time logging.
+  PYTHONIOENCODING: "utf-8" # WHY: Ensure UTF-8 encoding so docs with international characters work.
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: pypi # WHY: Use 'pypi' environment for PyPI publishing; ignore warnings.
+
+    steps:
+      # === ASSEMBLE ===
+
+      - name: A1) Checkout this repository with full history and tags
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.ref }}
+
+      - name: A2) Install uv (with caching)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: A3) Setup Python 3.14
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: A4) Display versions
+        run: |
+          python --version
+          uv --version
+
+      - name: A5) Sync to install all dependencies
+        # REQ: docs extra MUST include mike (and mkdocs stack).
+        # REQ: dev extra SHOULD include ruff/pyright/pytest/deptry/twine (as used below).
+        run: |
+          uv sync --extra dev --extra docs --upgrade
+
+      # === BASELINE CHECKS (VALIDATE ONLY) ===
+
+      - name: B1) Ruff format (check only)
+        run: uv run ruff format --check .
+
+      - name: B2) Ruff lint (no fixes)
+        run: uv run ruff check .
+
+      - name: B3) Validate project.toml
+        run: uvx validate-pyproject
+
+      - name: B4) Pyright (type check)
+        run: uv run pyright
+
+      - name: B5) Deptry (dependency check)
+        run: uvx deptry .
+
+      # === DEPLOY  (BUILD, RELEASE, DOCS, PACKAGE) ===
+
+      - name: D1) Extract plain version from tag (no leading 'v')
+        id: ver
+        shell: bash
+        run: echo "plain=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: D2) Build sdist + wheel
+        run: uv build
+
+      - name: D3) Ensure built artifact version matches tag
+        shell: bash
+        run: |
+          set -e
+          TAG="${{ steps.ver.outputs.plain }}"
+          echo "Tag version: $TAG"
+          ls dist
+          # Check that at least one artifact embeds the same version
+          if ! ls dist/*"$TAG"*.whl dist/*"$TAG"*.tar.gz >/dev/null 2>&1; then
+            echo "ERROR: Built artifact version does not match tag $TAG"
+            exit 1
+          fi
+          echo "Artifact version matches tag."
+
+      - name: D4) Validate built artifacts
+        run: uv run twine check dist/*
+
+      - name: D5) List dist artifacts
+        run: ls -lah dist
+
+      - name: D6) Create GitHub Release and upload artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }} # e.g., vx.y.z
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+          draft: false
+          prerelease: false
+          make_latest: true
+
+      - name: D7) Publish to PyPI (Trusted Publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      # === DOCS (MIKE VERSIONED DOCS) ===
+
+      - name: D8) Fetch organization MkDocs base config
+        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+        run: curl -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
+
+      - name: D9) Configure git identity for mike
+        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: D10) Deploy docs for this version and update latest alias
+        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+        run: |
+          set -e
+          VERSION="${{ steps.ver.outputs.plain }}"
+          echo "Deploying docs for version: $VERSION"
+          uv run mike deploy --push --update-aliases "$VERSION" latest
+          uv run mike set-default --push latest
+
+      - name: D11) Show mike versions (after)
+        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+        run: uv run mike list
