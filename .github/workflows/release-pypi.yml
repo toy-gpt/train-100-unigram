@@ -1,4 +1,16 @@
-# .github/workflows/release.yml
+# ============================================================
+# .github/workflows/release-pypi.yml (Release PyPI + versioned docs via mike)
+# ============================================================
+# Variant: org-mkdocs
+# SOURCE: https://github.com/denisecase/templates
+# OBS: Fetches org-wide MkDocs base config at run time (network dependency).
+# REQ: The referenced raw URL must remain public/accessible to GitHub Actions.
+# WHY: Keeps documentation theming/config consistent across org repositories.
+
+# WHY-FILE: Build and deploy documentation to GitHub Pages on pushes to main.
+# REQ: Repo Settings -> Pages -> Build and deployment -> Source:
+#      GitHub Actions
+
 name: Release (PyPI + versioned docs via mike)
 
 # WHY: Publish a tagged release to PyPI and deploy versioned docs using mike.

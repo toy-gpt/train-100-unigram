@@ -1,17 +1,18 @@
 # ============================================================
 # .github/workflows/ci-python-mkdocs.yml (Continuous Integration)
 # ============================================================
+# Variant: org-mkdocs
 # SOURCE: https://github.com/denisecase/templates
-#
+# OBS: Fetches org-wide MkDocs base config at run time (network dependency).
+# REQ: The referenced raw URL must remain public/accessible to GitHub Actions.
+# WHY: Keeps documentation theming/config consistent across org repositories.
+
 # WHY-FILE: Validate repository hygiene, python, and documentation builds.
 # REQ: Any check that can be run locally MUST be available locally via pre-commit.
 # REQ: CI MUST NOT introduce arbitrary rules that are not reproducible locally.
 # OBS: CI validates only; it never edits files or deploys docs.
 
 name: CI (Python + MkDocs)
-
-# WHY: Validate code, docs, and repo metadata on PRs and pushes.
-# OBS: This workflow validates only; it never deploys.
 
 on:
   push:
