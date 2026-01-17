@@ -13,6 +13,14 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [0.9.1] - 2026-01-16
+
+### Updated
+
+- EOL in meta JSON
+
+---
+
 ## [0.9.0] - 2026-01-16
 
 ### Added
@@ -41,5 +49,6 @@ git tag v0.9.0 -m "0.9.0"
 git push origin v0.9.0
 ```
 
-[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.1
 [0.9.0]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.0
