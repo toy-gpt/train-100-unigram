@@ -26,7 +26,6 @@ Notes:
 """
 
 import logging
-import math
 from pathlib import Path
 from typing import Final
 
@@ -40,12 +39,16 @@ from toy_gpt_train.io_artifacts import (
     write_artifacts,
     write_training_log,
 )
+from toy_gpt_train.math_training import argmax, cross_entropy_loss
+
+__all__ = [
+    "make_training_pairs",
+    "row_labeler_unigram",
+    "token_row_index_unigram",
+    "train_model",
+]
 
 LOG: logging.Logger = get_logger("TRAIN", level="INFO")
-
-BASE_DIR: Final[Path] = Path(__file__).resolve().parents[2]
-OUTPUTS_DIR: Final[Path] = BASE_DIR / "outputs"
-TRAIN_LOG_PATH: Final[Path] = OUTPUTS_DIR / "train_log.csv"
 
 
 def token_row_index_unigram(token_id: int, vocab_size: int) -> int:
@@ -90,45 +93,6 @@ def make_training_pairs(token_ids: list[int]) -> list[tuple[int, int]]:
     for i in range(len(token_ids) - 1):
         pairs.append((token_ids[i], token_ids[i + 1]))
     return pairs
-
-
-def argmax(values: list[float]) -> int:
-    """Return index of maximum value.
-
-    Args:
-        values: List of numeric values.
-
-    Returns:
-        Index of the largest value.
-    """
-    best_idx: int = 0
-    best_val: float = values[0]
-    for i in range(1, len(values)):
-        if values[i] > best_val:
-            best_val = values[i]
-            best_idx = i
-    return best_idx
-
-
-def cross_entropy_loss(probs: list[float], target_id: int) -> float:
-    """Compute cross-entropy loss: -log(p[target]).
-
-    Cross-entropy measures how well the predicted probability distribution
-    matches the true distribution (which is 1.0 for the correct token, 0.0
-    for all others). Lower loss means better predictions.
-
-    Args:
-        probs: Probability distribution over vocabulary (sums to 1.0).
-        target_id: Index of the correct next token.
-
-    Returns:
-        Cross-entropy loss value. Ranges from 0 (perfect prediction) to
-        infinity (predicted probability was near zero for correct token).
-    """
-    p: float = probs[target_id]
-    # Clamp to avoid log(0) which would return -infinity.
-    p = max(p, 1e-12)
-    return -math.log(p)
 
 
 def train_model(
@@ -216,6 +180,10 @@ def main() -> None:
 
     log_header(LOG, "Training Demo: Next-Token Softmax Regression")
 
+    base_dir: Final[Path] = Path(__file__).resolve().parents[2]
+    outputs_dir: Final[Path] = base_dir / "outputs"
+    train_log_path: Final[Path] = outputs_dir / "train_log.csv"
+
     # Step 0: Identify the corpus file (single file rule).
     corpus_path: Path = find_single_corpus_file(CORPUS_DIR)
 
@@ -258,11 +226,11 @@ def main() -> None:
     )
 
     # Step 7: Save training metrics for analysis.
-    write_training_log(TRAIN_LOG_PATH, history)
+    write_training_log(train_log_path, history)
 
     # Step 7b: Write inspectable artifacts for downstream use.
     write_artifacts(
-        base_dir=BASE_DIR,
+        base_dir=base_dir,
         corpus_path=corpus_path,
         vocab=vocab,
         model=model,

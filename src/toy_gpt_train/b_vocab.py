@@ -17,6 +17,8 @@ import logging
 
 from datafun_toolkit.logger import get_logger, log_header
 
+__all__ = ["Vocabulary"]
+
 LOG: logging.Logger = get_logger("VOCAB", level="INFO")
 
 
@@ -69,23 +71,34 @@ class Vocabulary:
 
 
 def main() -> None:
-    """Demonstrate vocabulary construction from a tiny corpus."""
+    """Demonstrate vocabulary construction from the project corpus.
+
+    Flow:
+    1) Tokenize corpus text -> tokens (list[str])
+    2) Build vocabulary -> token_to_id, id_to_token, token_freq
+    3) Demonstrate one lookup (token -> id, token -> frequency)
+    """
     from toy_gpt_train.a_tokenizer import SimpleTokenizer
 
     log_header(LOG, "Vocabulary Demo")
 
+    # 1) Tokenize - start with corpus and turn it into tokens
     tokenizer: SimpleTokenizer = SimpleTokenizer()
     tokens: list[str] = tokenizer.get_tokens()
 
+    # 2) Build vocabulary (the set of unique tokens) from the list of tokens
     vocab: Vocabulary = Vocabulary(tokens)
     LOG.info(f"Vocabulary size: {vocab.vocab_size()}")
 
     if tokens:
         sample_token: str = tokens[0]
+        sample_id: int | None = vocab.get_token_id(sample_token)
+        sample_freq: int = vocab.get_token_frequency(sample_token)
+
         LOG.info(
             f"Sample token: {sample_token!r} "
-            f"| ID: {vocab.get_token_id(sample_token)} "
-            f"| Frequency: {vocab.get_token_frequency(sample_token)}"
+            f"| ID: {sample_id} "
+            f"| Frequency: {sample_freq}"
         )
     else:
         LOG.info("No tokens found; cannot demonstrate vocabulary lookup.")

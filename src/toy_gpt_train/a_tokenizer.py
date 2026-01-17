@@ -17,6 +17,8 @@ from typing import Final
 
 from datafun_toolkit.logger import get_logger, log_header
 
+__all__ = ["SimpleTokenizer"]
+
 LOG: logging.Logger = get_logger("TOKEN", level="INFO")
 
 BASE_DIR: Final[Path] = Path(__file__).resolve().parents[2]
@@ -100,7 +102,7 @@ def main() -> None:
     """Demonstrate tokenization on the default corpus file."""
     import statistics
 
-    log_header(LOG, "Simple Tokenizer Demo")
+    log_header(LOG, "Tokenizer Demo")
 
     tokenizer: SimpleTokenizer = SimpleTokenizer()
     tokens: list[str] = tokenizer.get_tokens()

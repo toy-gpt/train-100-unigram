@@ -23,6 +23,8 @@ from typing import Final
 
 from datafun_toolkit.logger import get_logger, log_header
 
+__all__ = ["SimpleNextTokenModel"]
+
 LOG: logging.Logger = get_logger("MODEL", level="INFO")
 
 
@@ -57,8 +59,8 @@ class SimpleNextTokenModel:
     @staticmethod
     def _softmax(scores: list[float]) -> list[float]:
         max_score: float = max(scores)
-        exp_scores = [math.exp(s - max_score) for s in scores]
-        total = sum(exp_scores)
+        exp_scores: list[float] = [math.exp(s - max_score) for s in scores]
+        total: float = sum(exp_scores)
         return [s / total for s in exp_scores]
 
 
@@ -68,7 +70,7 @@ def main() -> None:
     from toy_gpt_train.a_tokenizer import SimpleTokenizer
     from toy_gpt_train.b_vocab import Vocabulary
 
-    log_header(LOG, "Simple Next-Token Model Demo (Unigram Context)")
+    log_header(LOG, "Simple Next-Token Model Demo")
 
     # Step 1: Tokenize input text.
     tokenizer: SimpleTokenizer = SimpleTokenizer()

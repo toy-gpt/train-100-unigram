@@ -1,4 +1,4 @@
-"""io.py - Input/output and training-artifact utilities used by the models.
+"""io_artifacts.py - Input/output and training-artifact utilities used by the models.
 
 This module is responsible for persisting and describing the results of
 model training in a consistent, inspectable format.
@@ -6,16 +6,16 @@ model training in a consistent, inspectable format.
 It does not perform training.
 It:
 - Writes artifacts produced by training (weights, vocabulary, logs, metadata)
-- Enforces a fixed repository layout for reproducibility
+- Assumes a conventional repository layout for reproducibility
 - Provides small helper utilities shared across training and inference
 
-The directory structure is intentionally fixed:
+The expected directory structure is:
 - artifacts/ contains all inspectable model outputs
-- corpus/ contains exactly one training text file
+- corpus/ contains training text files (often exactly one)
 - outputs/ contains training logs and diagnostics
 
 External callers should treat paths as implementation details and interact
-only through the functions provided here.
+through the functions provided here.
 
 
 Concepts
@@ -116,13 +116,13 @@ __all__ = [
     "write_vocabulary_csv",
 ]
 
-LOG: logging.Logger = get_logger("IO", level="INFO")
-
 
 type RowLabeler = Callable[[int], str]
 type JsonScalar = str | int | float | bool | None
 type JsonValue = JsonScalar | list["JsonValue"] | dict[str, "JsonValue"]
 type JsonObject = dict[str, JsonValue]
+
+LOG: logging.Logger = get_logger("IO", level="INFO")
 
 
 class VocabularyLike(Protocol):
@@ -145,13 +145,20 @@ class VocabularyLike(Protocol):
         ...
 
 
-_BASE_DIR: Final[Path] = Path(__file__).resolve().parents[2]
-_OUTPUTS_DIR: Final[Path] = _BASE_DIR / "outputs"
-_ARTIFACTS_DIR: Final[Path] = _BASE_DIR / "artifacts"
-_META_PATH: Final[Path] = _ARTIFACTS_DIR / "00_meta.json"
-_VOCAB_PATH: Final[Path] = _ARTIFACTS_DIR / "01_vocabulary.csv"
-_WEIGHTS_PATH: Final[Path] = _ARTIFACTS_DIR / "02_model_weights.csv"
-_EMBEDDINGS_PATH: Final[Path] = _ARTIFACTS_DIR / "03_token_embeddings.csv"
+def artifacts_dir_from_base_dir(base_dir: Path) -> Path:
+    """Return artifacts/ directory under a repository base directory."""
+    return base_dir / "artifacts"
+
+
+def artifact_paths_from_base_dir(base_dir: Path) -> dict[str, Path]:
+    """Return standard artifact paths under base_dir/artifacts/."""
+    artifacts_dir = artifacts_dir_from_base_dir(base_dir)
+    return {
+        "00_meta.json": artifacts_dir / "00_meta.json",
+        "01_vocabulary.csv": artifacts_dir / "01_vocabulary.csv",
+        "02_model_weights.csv": artifacts_dir / "02_model_weights.csv",
+        "03_token_embeddings.csv": artifacts_dir / "03_token_embeddings.csv",
+    }
 
 
 def find_single_corpus_file(corpus_dir: Path) -> Path:
@@ -169,6 +176,11 @@ def find_single_corpus_file(corpus_dir: Path) -> Path:
         raise ValueError(msg)
 
     return files[0]
+
+
+def outputs_dir_from_base_dir(base_dir: Path) -> Path:
+    """Return outputs/ directory under a repository base directory."""
+    return base_dir / "outputs"
 
 
 def repo_name_from_base_dir(base_dir: Path) -> str:
@@ -211,13 +223,19 @@ def write_artifacts(
         row_labeler: Function that maps a model weight-row index to a label
             written in the first column of 02_model_weights.csv.
     """
-    _ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    artifacts_dir: Final[Path] = base_dir / "artifacts"
+    meta_path: Final[Path] = artifacts_dir / "00_meta.json"
+    vocab_path: Final[Path] = artifacts_dir / "01_vocabulary.csv"
+    weights_path: Final[Path] = artifacts_dir / "02_model_weights.csv"
+    embeddings_path: Final[Path] = artifacts_dir / "03_token_embeddings.csv"
 
-    write_vocabulary_csv(_VOCAB_PATH, vocab)
-    write_model_weights_csv(_WEIGHTS_PATH, vocab, model, row_labeler=row_labeler)
-    write_token_embeddings_csv(_EMBEDDINGS_PATH, model, row_labeler=row_labeler)
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+    write_vocabulary_csv(vocab_path, vocab)
+    write_model_weights_csv(weights_path, vocab, model, row_labeler=row_labeler)
+    write_token_embeddings_csv(embeddings_path, model, row_labeler=row_labeler)
     write_meta_json(
-        _META_PATH,
+        meta_path,
         base_dir=base_dir,
         corpus_path=corpus_path,
         vocab_size=vocab.vocab_size(),
@@ -260,6 +278,9 @@ def write_meta_json(
     """
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Derive sibling artifact paths from base_dir
+    artifact_paths = artifact_paths_from_base_dir(base_dir)
+
     repo_name = repo_name_from_base_dir(base_dir)
     corpus_rel = str(corpus_path.resolve().relative_to(base_dir.resolve()))
     corpus_text = corpus_path.read_text(encoding="utf-8")
@@ -290,10 +311,10 @@ def write_meta_json(
             ),
         },
         "artifacts": {
-            "00_meta.json": path.name,
-            "01_vocabulary.csv": _VOCAB_PATH.name,
-            "02_model_weights.csv": _WEIGHTS_PATH.name,
-            "03_token_embeddings.csv": _EMBEDDINGS_PATH.name,
+            "00_meta.json": artifact_paths["00_meta.json"].name,
+            "01_vocabulary.csv": artifact_paths["01_vocabulary.csv"].name,
+            "02_model_weights.csv": artifact_paths["02_model_weights.csv"].name,
+            "03_token_embeddings.csv": artifact_paths["03_token_embeddings.csv"].name,
         },
         "concepts": {
             "token": "An atomic symbol produced by the tokenizer (e.g., a word).",
@@ -328,7 +349,7 @@ def write_meta_json(
         ],
     }
 
-    # WHY: Ensure the file always ends with a newline so pre-commit's
+    # WHY: Ensure the file always ends with a newline so pre-commit
     # end-of-file-fixer does not modify generated artifacts in CI.
     rendered = json.dumps(meta, indent=2, sort_keys=True) + "\n"
     path.write_text(rendered, encoding="utf-8")

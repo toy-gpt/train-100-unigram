@@ -29,9 +29,9 @@ task = "next-token prediction"
 
 [observation]
 corpus_id = "000"
-corpus_name = "tiny_cat_dog"
+corpus_name = "cat_dog"
 corpus_path = "corpus/000_cat_dog.txt"
-corpus_note = "Deliberately minimal corpus to make the learning loop inspectable."
+corpus_note = "Deliberately neutral corpus to make the learning loop inspectable."
 
 [artifact]
 pretrained = true
