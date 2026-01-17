@@ -328,10 +328,12 @@ def write_meta_json(
         ],
     }
 
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(meta, f, indent=2, sort_keys=True)
+    # WHY: Ensure the file always ends with a newline so pre-commit's
+    # end-of-file-fixer does not modify generated artifacts in CI.
+    rendered = json.dumps(meta, indent=2, sort_keys=True) + "\n"
+    path.write_text(rendered, encoding="utf-8")
 
-    LOG.info("Wrote meta to %s", path)
+    LOG.info(f"Wrote meta to {path}")
 
 
 def write_model_weights_csv(
