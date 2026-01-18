@@ -1,5 +1,5 @@
 """
-tests/test_imports.py
+tests/test_train.py
 
 REQ: Verify that the package can be imported.
 WHY: Minimal correctness requirement.
