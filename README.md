@@ -13,8 +13,8 @@
 
 This repository is part of a series of toy training repositories plus a companion client repository:
 
-- **Training repositories** produce pretrained artifacts (vocabulary, weights, metadata).
-- The **client repository** loads those artifacts and provides an interactive prompt.
+- [**Training repositories**](https://github.com/toy-gpt) produce pretrained artifacts (vocabulary, weights, metadata).
+- A [**web app**](https://toy-gpt.github.io/toy-gpt-chat/) loads the artifacts and provides an interactive prompt.
 
 ## Contents
 

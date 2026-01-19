@@ -241,4 +241,4 @@ where = ["src"]
 fallback_version = "0.1.0"
 # Optional, but recommended: write the computed version into package at build time.
 # Can be read at runtime, without importing setuptools_scm.
-version_file = "src/toy_gpt_train/_version.py"
+version_file = "src/toy_gpt_train/_version.py" # CUSTOM: Match package name.
