@@ -1,0 +1,4056 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Toy-GPT project documentation.">
+      
+      
+      
+        <link rel="canonical" href="https://toy-gpt.github.io/train-100-unigram/0.9.5/api/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>API - Toy-GPT: train-100-unigram</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../stylesheets/brand.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Toy-GPT: train-100-unigram" class="md-header__button md-logo" aria-label="Toy-GPT: train-100-unigram" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Toy-GPT: train-100-unigram
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/toy-gpt/train-100-unigram" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Toy-GPT: train-100-unigram" class="md-nav__button md-logo" aria-label="Toy-GPT: train-100-unigram" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    Toy-GPT: train-100-unigram
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/toy-gpt/train-100-unigram" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#training-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training Math
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        math_training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="math_training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training.argmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        argmax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training.cross_entropy_loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross_entropy_loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        c_model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="c_model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SimpleNextTokenModel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleNextTokenModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __init__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel.forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forward
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        d_train
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="d_train">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.make_training_pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        make_training_pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.row_labeler_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        row_labeler_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.token_row_index_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        token_row_index_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.train_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        train_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        e_infer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="e_infer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ArtifactVocabulary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ArtifactVocabulary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_id_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_id_token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_frequency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.vocab_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vocab_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.generate_tokens_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_tokens_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_model_weights_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_model_weights_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_vocabulary_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_vocabulary_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.require_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        require_artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.top_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        top_k
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artifacts-and-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifacts and I/O
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        io_artifacts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="io_artifacts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts--concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concepts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts--design-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VocabularyLike
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VocabularyLike">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_id_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_id_token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_frequency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.vocab_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vocab_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.artifact_paths_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        artifact_paths_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.artifacts_dir_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        artifacts_dir_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.find_single_corpus_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        find_single_corpus_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.outputs_dir_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outputs_dir_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.repo_name_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        repo_name_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.sha256_of_bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sha256_of_bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.sha256_of_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sha256_of_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_meta_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_meta_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_model_weights_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_model_weights_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_token_embeddings_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_token_embeddings_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_training_log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_training_log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_vocabulary_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_vocabulary_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marker-file-pytyped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marker File: py.typed
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#training-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training Math
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        math_training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="math_training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training.argmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        argmax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.math_training.cross_entropy_loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross_entropy_loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        c_model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="c_model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SimpleNextTokenModel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleNextTokenModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __init__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.SimpleNextTokenModel.forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forward
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.c_model.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        d_train
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="d_train">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.make_training_pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        make_training_pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.row_labeler_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        row_labeler_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.token_row_index_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        token_row_index_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.d_train.train_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        train_model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        e_infer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="e_infer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ArtifactVocabulary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ArtifactVocabulary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_id_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_id_token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_frequency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.ArtifactVocabulary.vocab_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vocab_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.generate_tokens_unigram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_tokens_unigram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_model_weights_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_model_weights_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.load_vocabulary_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_vocabulary_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.require_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        require_artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.e_infer.top_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        top_k
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#artifacts-and-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Artifacts and I/O
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        io_artifacts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="io_artifacts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts--concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concepts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts--design-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VocabularyLike
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VocabularyLike">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_id_token" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_id_token
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_frequency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_frequency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_token_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.VocabularyLike.vocab_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vocab_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.artifact_paths_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        artifact_paths_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.artifacts_dir_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        artifacts_dir_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.find_single_corpus_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        find_single_corpus_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.outputs_dir_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outputs_dir_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.repo_name_from_base_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        repo_name_from_base_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.sha256_of_bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sha256_of_bytes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.sha256_of_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sha256_of_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_artifacts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_meta_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_meta_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_model_weights_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_model_weights_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_token_embeddings_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_token_embeddings_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_training_log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_training_log
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toy_gpt_train.io_artifacts.write_vocabulary_csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_vocabulary_csv
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marker-file-pytyped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marker File: py.typed
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+<p>This page documents the public API of the package.</p>
+<p>Documented functions below are considered stable.</p>
+<hr />
+<h2 id="training-math">Training Math<a class="headerlink" href="#training-math" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="toy_gpt_train.math_training" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">math_training</span>
+
+
+<a href="#toy_gpt_train.math_training" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>math_training.py - Mathematical utilities used during model training.</p>
+<p>This module contains reusable math functions used by the training and
+inference code in this repository.</p>
+<p>Scope:
+- Pure functions with no model, vocabulary, or artifact assumptions.
+- Reusable across unigram, bigram, and higher-context variants.</p>
+<p>These functions are intentionally simple and explicit to support inspection
+and debugging.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.math_training.argmax" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">argmax</span>
+
+
+<a href="#toy_gpt_train.math_training.argmax" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">argmax</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the index of the maximum value in a list.</p>
+
+
+<details class="concept" open>
+  <summary>Concept</summary>
+  <p>argmax is the argument (index) at which a function reaches its maximum.</p>
+</details>
+
+<details class="common-uses" open>
+  <summary>Common uses</summary>
+  <ul>
+<li>Measuring accuracy during training (pick the most likely token)</li>
+<li>Greedy decoding during inference (choose the top prediction)</li>
+</ul>
+</details>
+
+<details class="in-training-and-inference" open>
+  <summary>In training and inference</summary>
+  <ul>
+<li>A model outputs a probability distribution over possible next tokens.</li>
+<li>The token with the highest probability is the model's most confident prediction.</li>
+<li>argmax selects that token.</li>
+</ul>
+</details>
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>values = [0.1, 0.7, 0.2] has index values of 0,1, 2 respectively.
+argmax(values) -&gt; 1 (since 0.7 is the largest value)</p>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>values</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A non-empty list of numeric values (typically logits or probabilities).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The index of the largest value in the list.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If values is empty.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.math_training.cross_entropy_loss" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">cross_entropy_loss</span>
+
+
+<a href="#toy_gpt_train.math_training.cross_entropy_loss" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">cross_entropy_loss</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">probs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">target_id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute cross-entropy loss for a single training example.</p>
+
+
+<details class="concept" open>
+  <summary>Cross-Entropy Loss</summary>
+  <p>Cross-entropy measures how well a predicted probability distribution
+matches the true outcome.</p>
+<p>In next-token prediction:
+- The true distribution is "one-hot" which means we encode it as either 1 or 0:
+    - Probability = 1.0 for the correct next token
+    - Probability = 0.0 for all others
+- The model predicts a probability distribution over all tokens.</p>
+<p>Cross-entropy answers the question:
+    "How well does the predicted probability distribution align with the true outcome?"</p>
+</details>
+
+<details class="formula" open>
+  <summary>Formula</summary>
+  <p>loss = -log(p_correct)</p>
+<ul>
+<li>If the model assigns high probability to the correct token,
+  the loss is small.</li>
+<li>If the probability is near zero, the loss is large.</li>
+</ul>
+</details>
+
+<details class="numerical-safety" open>
+  <summary>Numerical safety</summary>
+  <p>log(0) is undefined, so we clamp probabilities to a small minimum
+(1e-12). This does not change learning behavior in practice,
+but prevents runtime errors.</p>
+</details>
+
+<details class="in-training" open>
+  <summary>In training</summary>
+  <ul>
+<li>This loss value drives gradient descent.</li>
+<li>Lower loss means better predictions.</li>
+</ul>
+</details>
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>probs</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A probability distribution over the vocabulary (sums to 1.0).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_id</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The integer ID of the correct next token.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A non-negative floating-point loss value.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <ul>
+<li>0.0 means a perfect prediction</li>
+</ul>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <ul>
+<li>Larger values indicate worse predictions</li>
+</ul>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Raises:
+    ValueError: If target_id is out of range for probs.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="toy_gpt_train.c_model" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">c_model</span>
+
+
+<a href="#toy_gpt_train.c_model" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>c_model.py - Simple model module.</p>
+<p>Defines a minimal next-token prediction model for a unigram context
+(uses a single token as context; no sequence history).</p>
+<p>Responsibilities:
+- Represent a simple parameterized model that maps a token ID
+  to a score for each token in the vocabulary.
+- Convert scores into probabilities using softmax.
+- Provide a forward pass (no training in this module).</p>
+<p>This model is intentionally simple:
+- one weight matrix (a 2D table: input_token x next_token)
+- one forward computation
+- no learning here</p>
+<p>Training is handled in a different module.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="toy_gpt_train.c_model.SimpleNextTokenModel" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">SimpleNextTokenModel</span>
+
+
+<a href="#toy_gpt_train.c_model.SimpleNextTokenModel" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A minimal next-token prediction model (unigram context).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.c_model.SimpleNextTokenModel.__init__" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__init__</span>
+
+
+<a href="#toy_gpt_train.c_model.SimpleNextTokenModel.__init__" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">__init__</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Initialize the model with a given vocabulary size.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.c_model.SimpleNextTokenModel.forward" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">forward</span>
+
+
+<a href="#toy_gpt_train.c_model.SimpleNextTokenModel.forward" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">forward</span><span class="p">(</span><span class="n">current_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Perform a forward pass.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>current_id</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Integer ID of the current token.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Probability distribution over next tokens.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.c_model.main" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">main</span>
+
+
+<a href="#toy_gpt_train.c_model.main" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Demonstrate a forward pass of the simple unigram model.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="training-pipeline">Training Pipeline<a class="headerlink" href="#training-pipeline" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="toy_gpt_train.d_train" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">d_train</span>
+
+
+<a href="#toy_gpt_train.d_train" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>d_train.py - Training loop module.</p>
+<p>Trains the SimpleNextTokenModel on a small token corpus
+using a unigram context (current token only).</p>
+<p>Responsibilities:
+- Create (current_token -&gt; next_token) training pairs from the corpus
+- Run a basic gradient-descent training loop
+- Track loss and accuracy per epoch
+- Write a CSV log of training progress
+- Write inspectable training artifacts (vocabulary, weights, embeddings, meta)</p>
+<p>Concepts:
+- softmax: converts raw scores into probabilities (so predictions sum to 1)
+- cross-entropy loss: measures how well predicted probabilities match the correct token
+- gradient descent: iterative weight updates to minimize loss
+  - think descending to find the bottom of a valley in a landscape
+  - where the valley floor corresponds to lower prediction error</p>
+<p>Notes:
+- This is intentionally simple: no deep learning framework, no Transformer.
+- The model is a softmax regression classifier per input token ID.
+- Training updates only the row of weights for the current token ID.
+- token_embeddings.csv is a visualization-friendly projection for levels 100-400;
+  in later repos (500+), embeddings become a first-class learned table.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.d_train.main" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">main</span>
+
+
+<a href="#toy_gpt_train.d_train.main" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Run a simple training demo end-to-end.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.d_train.make_training_pairs" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">make_training_pairs</span>
+
+
+<a href="#toy_gpt_train.d_train.make_training_pairs" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">make_training_pairs</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">token_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Convert a sequence of token IDs into (current, next) training pairs.</p>
+<p>Language models learn to predict "what comes next" given "what came before".
+This function creates supervised training examples by pairing each token
+with the token that follows it in the corpus.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>token_ids</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="int">int</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sequence of integer token IDs from the corpus.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="tuple">tuple</span>[<span title="int">int</span>, <span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of (input_id, target_id) tuples. Each tuple represents one</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="tuple">tuple</span>[<span title="int">int</span>, <span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>training example: given input_id, the model should predict target_id.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>Token sequence "the cat sat" with IDs [3, 1, 2] produces:
+[(3, 1), (1, 2)]
+Meaning: after token 3, predict token 1; after token 1, predict token 2.</p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.d_train.row_labeler_unigram" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">row_labeler_unigram</span>
+
+
+<a href="#toy_gpt_train.d_train.row_labeler_unigram" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">row_labeler_unigram</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">vocab</span><span class="p">:</span> <span class="n">VocabularyLike</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RowLabeler</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Map a unigram row index to a token label.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.d_train.token_row_index_unigram" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">token_row_index_unigram</span>
+
+
+<a href="#toy_gpt_train.d_train.token_row_index_unigram" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">token_row_index_unigram</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">token_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the row index for a unigram token ID.</p>
+<p>In a unigram model, each token maps directly to one row.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.d_train.train_model" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">train_model</span>
+
+
+<a href="#toy_gpt_train.d_train.train_model" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">train_model</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">model</span><span class="p">:</span> <span class="n">SimpleNextTokenModel</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Train the model using gradient descent on softmax cross-entropy.</p>
+<p>Training proceeds in epochs (full passes through all training pairs).
+For each pair, we:
+1. Compute the model's predicted probabilities (forward pass).
+2. Measure how wrong the prediction was (loss).
+3. Adjust weights to reduce the loss (gradient descent).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>model</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SimpleNextTokenModel (toy_gpt_train.c_model.SimpleNextTokenModel)" href="#toy_gpt_train.c_model.SimpleNextTokenModel">SimpleNextTokenModel</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The model to train (weights will be modified in place).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pairs</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="tuple">tuple</span>[<span title="int">int</span>, <span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of (input_id, target_id) training pairs.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>learning_rate</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Step size for gradient descent. Larger values learn
+faster but may overshoot; smaller values are more stable but slower.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epochs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of complete passes through the training data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>[<span title="str">str</span>, <span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of per-epoch metrics dictionaries containing epoch number,</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>[<span title="str">str</span>, <span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>average loss, and accuracy.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="inference">Inference<a class="headerlink" href="#inference" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="toy_gpt_train.e_infer" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">e_infer</span>
+
+
+<a href="#toy_gpt_train.e_infer" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>e_infer.py - Inference module (artifact-driven).</p>
+<p>Runs inference using previously saved training artifacts.</p>
+<p>Responsibilities:
+- Load inspectable training artifacts from artifacts/
+  - 00_meta.json
+  - 01_vocabulary.csv
+  - 02_model_weights.csv
+- Reconstruct a vocabulary-like interface and model weights
+- Generate tokens using greedy decoding (argmax)
+- Print top-k next-token probabilities for inspection</p>
+<p>Notes:
+- This module does NOT retrain by default.
+- If artifacts are missing, run d_train.py first.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="toy_gpt_train.e_infer.ArtifactVocabulary" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">ArtifactVocabulary</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#toy_gpt_train.e_infer.ArtifactVocabulary" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Vocabulary reconstructed from artifacts/01_vocabulary.csv.</p>
+<p>Provides the same surface area used by inference:
+- vocab_size()
+- get_token_id()
+- get_id_token()
+- get_token_frequency()</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.e_infer.ArtifactVocabulary.get_id_token" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_id_token</span>
+
+
+<a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_id_token" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_id_token</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the token for a given token ID, or None if not found.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.e_infer.ArtifactVocabulary.get_token_frequency" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_token_frequency</span>
+
+
+<a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_frequency" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_token_frequency</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the frequency count for a given token, or 0 if not found.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.e_infer.ArtifactVocabulary.get_token_id" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_token_id</span>
+
+
+<a href="#toy_gpt_train.e_infer.ArtifactVocabulary.get_token_id" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_token_id</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the token ID for a given token, or None if not found.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.e_infer.ArtifactVocabulary.vocab_size" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">vocab_size</span>
+
+
+<a href="#toy_gpt_train.e_infer.ArtifactVocabulary.vocab_size" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">vocab_size</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the total number of tokens in the vocabulary.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.generate_tokens_unigram" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">generate_tokens_unigram</span>
+
+
+<a href="#toy_gpt_train.e_infer.generate_tokens_unigram" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">generate_tokens_unigram</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">model</span><span class="p">:</span> <span class="n">SimpleNextTokenModel</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">vocab</span><span class="p">:</span> <span class="n">ArtifactVocabulary</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">start_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">num_tokens</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Generate tokens using a unigram context (current token only).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.load_meta" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">load_meta</span>
+
+
+<a href="#toy_gpt_train.e_infer.load_meta" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">load_meta</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsonObject</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Load 00_meta.json.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.load_model_weights_csv" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">load_model_weights_csv</span>
+
+
+<a href="#toy_gpt_train.e_infer.load_model_weights_csv" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">load_model_weights_csv</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Load 02_model_weights.csv -&gt; weights matrix.</p>
+<p>Expected shape:
+- one row per input token
+- one column per output token (after the first 'input_token' column)</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.load_vocabulary_csv" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">load_vocabulary_csv</span>
+
+
+<a href="#toy_gpt_train.e_infer.load_vocabulary_csv" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">load_vocabulary_csv</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArtifactVocabulary</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Load 01_vocabulary.csv -&gt; ArtifactVocabulary.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.main" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">main</span>
+
+
+<a href="#toy_gpt_train.e_infer.main" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Run inference using saved training artifacts.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.require_artifacts" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">require_artifacts</span>
+
+
+<a href="#toy_gpt_train.e_infer.require_artifacts" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">require_artifacts</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">meta_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">vocab_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">weights_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">train_hint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Fail fast with a helpful message if artifacts are missing.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.e_infer.top_k" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">top_k</span>
+
+
+<a href="#toy_gpt_train.e_infer.top_k" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">top_k</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">probs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return top-k (token_id, probability) pairs sorted by probability.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="artifacts-and-io">Artifacts and I/O<a class="headerlink" href="#artifacts-and-io" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="toy_gpt_train.io_artifacts" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">io_artifacts</span>
+
+
+<a href="#toy_gpt_train.io_artifacts" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>io_artifacts.py - Input/output and training-artifact utilities used by the models.</p>
+<p>This module is responsible for persisting and describing the results of
+model training in a consistent, inspectable format.</p>
+<p>It does not perform training.
+It:
+- Writes artifacts produced by training (weights, vocabulary, logs, metadata)
+- Assumes a conventional repository layout for reproducibility
+- Provides small helper utilities shared across training and inference</p>
+<p>The expected directory structure is:
+- artifacts/ contains all inspectable model outputs
+- corpus/ contains training text files (often exactly one)
+- outputs/ contains training logs and diagnostics</p>
+<p>External callers should treat paths as implementation details and interact
+through the functions provided here.</p>
+<h4 id="toy_gpt_train.io_artifacts--concepts">Concepts<a class="headerlink" href="#toy_gpt_train.io_artifacts--concepts" title="Permanent link">&para;</a></h4>
+<p>Artifact
+    A concrete file written to disk that captures some aspect of training.
+    In this project, artifacts are designed to be:
+    - Human-readable (CSV / JSON)
+    - Stable across model variants (unigram, bigram, context-3, etc.)
+    - Reusable by inference without retraining</p>
+<p>Epoch
+    One epoch is one complete pass through all training examples.
+    Training typically consists of multiple epochs so the model can
+    gradually improve its predictions by repeatedly adjusting weights.</p>
+<p>Training Log
+    A CSV file recording per-epoch metrics such as:
+    - average loss
+    - accuracy
+    This allows learning behavior to be inspected after training.</p>
+<p>Vocabulary
+    A mapping between token strings and integer token IDs.
+    The vocabulary defines:
+    - the size of the model output space
+    - the meaning of each row and column in the weight tables</p>
+<p>Row Labeler
+    A small function that maps a numeric row index in the model's weight table
+    to a human-readable label.
+    For example, as the number of context tokens increases, the row labeler
+    produces context strings such as:
+    - unigram:        "cat"
+    - bigram:         "the|cat"
+    - context-3:      "the|black|cat"</p>
+<div class="highlight"><pre><span></span><code>Row labels are written into CSV artifacts to make model structure visible.
+</code></pre></div>
+<p>Model Weights
+    Numeric parameters learned during training.
+    Conceptually:
+    - each row corresponds to an input context
+    - each column corresponds to a possible next token
+    Weights are written verbatim so learning can be inspected or reused.</p>
+<p>Token Embeddings (Derived)
+    A simple 2D projection derived from model weights for visualization.
+    These are not learned embeddings yet.
+    In later stages (500+), embeddings become first-class learned parameters.</p>
+<p>Reproducibility Metadata
+    The 00_meta.json file records:
+    - which corpus was used
+    - how it was hashed
+    - which model variant was trained
+    - what training settings were applied
+    This allows results to be traced and compared across runs and repositories.</p>
+<h4 id="toy_gpt_train.io_artifacts--design-notes">Design Notes<a class="headerlink" href="#toy_gpt_train.io_artifacts--design-notes" title="Permanent link">&para;</a></h4>
+<ul>
+<li>This module is shared unchanged across model levels (100-400).</li>
+<li>More advanced pipelines (embeddings, attention, batching) build on
+  the same artifact-writing concepts.</li>
+<li>Centralizing I/O logic prevents drift across repositories
+  and keeps training code focused on learning.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="toy_gpt_train.io_artifacts.VocabularyLike" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">VocabularyLike</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.VocabularyLike" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
+
+
+
+        <p>Protocol for vocabulary-like objects used in training and artifacts.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.io_artifacts.VocabularyLike.get_id_token" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_id_token</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_id_token" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_id_token</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the token string for a given integer ID, or None if not found.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.io_artifacts.VocabularyLike.get_token_frequency" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_token_frequency</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_frequency" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_token_frequency</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the frequency count for a given token.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.io_artifacts.VocabularyLike.get_token_id" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_token_id</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.VocabularyLike.get_token_id" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_token_id</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the integer ID for a given token, or None if not found.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toy_gpt_train.io_artifacts.VocabularyLike.vocab_size" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">vocab_size</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.VocabularyLike.vocab_size" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">vocab_size</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the total number of unique tokens in the vocabulary.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.artifact_paths_from_base_dir" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">artifact_paths_from_base_dir</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.artifact_paths_from_base_dir" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">artifact_paths_from_base_dir</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return standard artifact paths under base_dir/artifacts/.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.artifacts_dir_from_base_dir" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">artifacts_dir_from_base_dir</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.artifacts_dir_from_base_dir" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">artifacts_dir_from_base_dir</span><span class="p">(</span><span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return artifacts/ directory under a repository base directory.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.find_single_corpus_file" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">find_single_corpus_file</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.find_single_corpus_file" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">find_single_corpus_file</span><span class="p">(</span><span class="n">corpus_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Find the single corpus file in corpus/ (same rule as SimpleTokenizer).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.outputs_dir_from_base_dir" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">outputs_dir_from_base_dir</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.outputs_dir_from_base_dir" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">outputs_dir_from_base_dir</span><span class="p">(</span><span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return outputs/ directory under a repository base directory.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.repo_name_from_base_dir" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">repo_name_from_base_dir</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.repo_name_from_base_dir" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">repo_name_from_base_dir</span><span class="p">(</span><span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Infer repository name from base directory.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.sha256_of_bytes" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sha256_of_bytes</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.sha256_of_bytes" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">sha256_of_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return hex SHA-256 digest for given bytes.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.sha256_of_file" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sha256_of_file</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.sha256_of_file" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">sha256_of_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return hex SHA-256 digest for a file.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_artifacts" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_artifacts</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_artifacts" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_artifacts</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">corpus_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">vocab</span><span class="p">:</span> <span class="n">VocabularyLike</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">model</span><span class="p">:</span> <span class="n">SimpleNextTokenModel</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">model_kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">row_labeler</span><span class="p">:</span> <span class="n">RowLabeler</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write all training artifacts to artifacts/.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>base_dir</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Repository base directory.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>corpus_path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Corpus file used for training.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>vocab</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="VocabularyLike (toy_gpt_train.io_artifacts.VocabularyLike)" href="#toy_gpt_train.io_artifacts.VocabularyLike">VocabularyLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>VocabularyLike instance.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SimpleNextTokenModel (toy_gpt_train.c_model.SimpleNextTokenModel)" href="#toy_gpt_train.c_model.SimpleNextTokenModel">SimpleNextTokenModel</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Trained model (weights already updated).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model_kind</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable model kind (e.g., "unigram", "bigram").</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>learning_rate</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training learning rate.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epochs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of training passes.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>row_labeler</code>
+            </td>
+            <td>
+                  <code><span title="toy_gpt_train.io_artifacts.RowLabeler">RowLabeler</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Function that maps a model weight-row index to a label
+written in the first column of 02_model_weights.csv.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_meta_json" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_meta_json</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_meta_json" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_meta_json</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">corpus_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">model_kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write 00_meta.json describing corpus, model, and training settings.</p>
+<p>This file is the authoritative, human-readable summary of a training run.
+It records:
+- what corpus was used
+- what model architecture was trained
+- how training was configured
+- which artifacts were produced</p>
+<p>The intent is transparency and reproducibility.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output JSON path (artifacts/00_meta.json).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>base_dir</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Repository base directory.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>corpus_path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Corpus file used for training.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>vocab_size</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of unique tokens.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model_kind</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable model kind
+(e.g., "unigram", "bigram", "context2", "context3").</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>learning_rate</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Training learning rate.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epochs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of epochs (full passes over the training pairs).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_model_weights_csv" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_model_weights_csv</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_model_weights_csv" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_model_weights_csv</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">vocab</span><span class="p">:</span> <span class="n">VocabularyLike</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">model</span><span class="p">:</span> <span class="n">SimpleNextTokenModel</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">row_labeler</span><span class="p">:</span> <span class="n">RowLabeler</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write 02_model_weights.csv with token-labeled columns.</p>
+
+
+<details class="shape" open>
+  <summary>Shape</summary>
+  <ul>
+<li>first column: input_token (serialized context label)</li>
+<li>remaining columns: one per output token (weights)</li>
+</ul>
+</details>
+
+<details class="notes" open>
+  <summary>Notes</summary>
+  <ul>
+<li>Tokens may be typed internally.</li>
+<li>This function serializes all token labels explicitly at the I/O boundary.</li>
+</ul>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_token_embeddings_csv" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_token_embeddings_csv</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_token_embeddings_csv" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_token_embeddings_csv</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">model</span><span class="p">:</span> <span class="n">SimpleNextTokenModel</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">row_labeler</span><span class="p">:</span> <span class="n">RowLabeler</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write 03_token_embeddings.csv as a simple 2D projection.</p>
+<p>This file is a derived visualization artifact, not a learned embedding table.</p>
+
+
+<details class="for-each-model-weight-row" open>
+  <summary>For each model weight row</summary>
+  <ul>
+<li>x coordinate = first weight (if present)</li>
+<li>y coordinate = second weight (if present)</li>
+</ul>
+</details>        <p>If a row has fewer than two weights, missing values default to 0.0.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output CSV path.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SimpleNextTokenModel (toy_gpt_train.c_model.SimpleNextTokenModel)" href="#toy_gpt_train.c_model.SimpleNextTokenModel">SimpleNextTokenModel</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Trained model providing a weight matrix.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>row_labeler</code>
+            </td>
+            <td>
+                  <code><span title="toy_gpt_train.io_artifacts.RowLabeler">RowLabeler</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Function mapping row index to a human-readable label.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_training_log" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_training_log</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_training_log" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_training_log</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write per-epoch training metrics to a CSV file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output file path.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>history</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>[<span title="str">str</span>, <span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of per-epoch metrics dictionaries.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="toy_gpt_train.io_artifacts.write_vocabulary_csv" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">write_vocabulary_csv</span>
+
+
+<a href="#toy_gpt_train.io_artifacts.write_vocabulary_csv" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">write_vocabulary_csv</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">vocab</span><span class="p">:</span> <span class="n">VocabularyLike</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Write 01_vocabulary.csv: token_id, token, frequency.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output CSV path.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>vocab</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="VocabularyLike (toy_gpt_train.io_artifacts.VocabularyLike)" href="#toy_gpt_train.io_artifacts.VocabularyLike">VocabularyLike</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vocabulary instance (must provide vocab_size(), get_id_token(), get_token_frequency()).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="marker-file-pytyped">Marker File: py.typed<a class="headerlink" href="#marker-file-pytyped" title="Permanent link">&para;</a></h2>
+<p>This package includes a <code>py.typed</code> marker file as defined by PEP 561.</p>
+<ul>
+<li>Type checkers (Pyright, Mypy) trust inline type hints in installed packages only when this marker is present.</li>
+<li>The file may be empty; comments are allowed.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/toy-gpt/train-100-unigram" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
