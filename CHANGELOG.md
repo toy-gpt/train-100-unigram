@@ -13,6 +13,14 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [0.9.6] - 2026-01-18
+
+### Updated
+
+- Unigram predicts simply based on frequency.
+
+---
+
 ## [0.9.5] - 2026-01-18
 
 ### Updated
@@ -65,7 +73,8 @@ git tag v0.9.0 -m "0.9.0"
 git push origin v0.9.0
 ```
 
-[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.5...HEAD
+[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.6...HEAD
+[0.9.6]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.6
 [0.9.5]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.5
 [0.9.3]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.3
 [0.9.1]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.1

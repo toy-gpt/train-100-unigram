@@ -1,17 +1,17 @@
 """c_model.py - Simple model module.
 
-Defines a minimal next-token prediction model for a unigram context
-(uses a single token as context; no sequence history).
+Defines a minimal next-token prediction model for unigram (no context).
+  A unigram models P(next) - just word frequencies, ignoring all context.
 
 Responsibilities:
-- Represent a simple parameterized model that maps a token ID
-  to a score for each token in the vocabulary.
+- Represent a simple parameterized model that outputs the same
+  probability distribution regardless of input.
 - Convert scores into probabilities using softmax.
 - Provide a forward pass (no training in this module).
 
 This model is intentionally simple:
-- one weight matrix (a 2D table: input_token x next_token)
-- one forward computation
+- one weight vector (1D: just next_token scores)
+- one forward computation that ignores input
 - no learning here
 
 Training is handled in a different module.
@@ -29,31 +29,35 @@ LOG: logging.Logger = get_logger("MODEL", level="INFO")
 
 
 class SimpleNextTokenModel:
-    """A minimal next-token prediction model (unigram context)."""
+    """A minimal next-token prediction model (unigram - no context).
+
+    Unigram ignores all context and predicts based solely on
+    corpus word frequencies: P(next).
+    """
 
     def __init__(self, vocab_size: int) -> None:
         """Initialize the model with a given vocabulary size."""
         self.vocab_size: Final[int] = vocab_size
 
-        # Weight matrix: vocab_size x vocab_size
-        # row = current token
-        # col = next token
-        self.weights: list[list[float]] = [
-            [0.0 for _ in range(vocab_size)] for _ in range(vocab_size)
-        ]
+        # Weight matrix: 1 row x vocab_size columns
+        # Unigram has only ONE row because predictions don't depend on input.
+        # We store as list[list[float]] with 1 row for artifact compatibility.
+        self.weights: list[list[float]] = [[0.0 for _ in range(vocab_size)]]
 
         LOG.info(f"Model initialized with vocabulary size {vocab_size} (unigram).")
 
-    def forward(self, current_id: int) -> list[float]:
+    def forward(self, current_id: int | None = None) -> list[float]:
         """Perform a forward pass.
 
         Args:
-            current_id: Integer ID of the current token.
+            current_id: Ignored for unigram - included for API consistency.
 
         Returns:
-            Probability distribution over next tokens.
+            Probability distribution over next tokens (same for all inputs).
         """
-        scores: list[float] = self.weights[current_id]
+        # Unigram ignores current_id - always returns the same distribution
+        _ = current_id
+        scores: list[float] = self.weights[0]
         return self._softmax(scores)
 
     @staticmethod
@@ -70,7 +74,7 @@ def main() -> None:
     from toy_gpt_train.a_tokenizer import SimpleTokenizer
     from toy_gpt_train.b_vocab import Vocabulary
 
-    log_header(LOG, "Simple Next-Token Model Demo")
+    log_header(LOG, "Simple Next-Token Model Demo (Unigram - No Context)")
 
     # Step 1: Tokenize input text.
     tokenizer: SimpleTokenizer = SimpleTokenizer()
@@ -86,19 +90,11 @@ def main() -> None:
     # Step 3: Initialize model.
     model: SimpleNextTokenModel = SimpleNextTokenModel(vocab_size=vocab.vocab_size())
 
-    # Step 4: Select a single current token.
-    current_token: str = tokens[0]
-    current_id: int | None = vocab.get_token_id(current_token)
+    # Step 4: Forward pass (unigram ignores input).
+    probs: list[float] = model.forward()
 
-    if current_id is None:
-        LOG.info(f"Token {current_token!r} not found in vocabulary.")
-        return
-
-    # Step 5: Forward pass (unigram context).
-    probs: list[float] = model.forward(current_id)
-
-    # Step 6: Inspect results.
-    LOG.info(f"Input token: {current_token!r} (ID {current_id})")
+    # Step 5: Inspect results.
+    LOG.info("Unigram ignores input - same predictions for any context:")
     LOG.info("Output probabilities for next token:")
     for idx, prob in enumerate(probs):
         tok: str | None = vocab.get_id_token(idx)

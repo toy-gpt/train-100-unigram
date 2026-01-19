@@ -14,6 +14,11 @@ Responsibilities:
 Notes:
 - This module does NOT retrain by default.
 - If artifacts are missing, run d_train.py first.
+
+Unigram inference:
+    The model ignores all context and predicts based solely on
+    corpus word frequencies. Every call to forward() returns the
+    same probability distribution.
 """
 
 import argparse
@@ -28,7 +33,6 @@ from datafun_toolkit.logger import get_logger, log_header
 
 from toy_gpt_train.c_model import SimpleNextTokenModel
 from toy_gpt_train.math_training import argmax
-from toy_gpt_train.prompts import parse_args
 
 __all__ = [
     "ArtifactVocabulary",
@@ -36,6 +40,7 @@ __all__ = [
     "load_meta",
     "load_model_weights_csv",
     "load_vocabulary_csv",
+    "parse_args",
     "require_artifacts",
     "top_k",
 ]
@@ -142,9 +147,7 @@ def load_vocabulary_csv(path: Path) -> ArtifactVocabulary:
 def load_model_weights_csv(path: Path, vocab_size: int) -> list[list[float]]:
     """Load 02_model_weights.csv -> weights matrix.
 
-    Expected shape:
-    - one row per input token
-    - one column per output token (after the first 'input_token' column)
+    For unigram, expects exactly 1 row (context-independent predictions).
     """
     weights: list[list[float]] = []
 
@@ -173,9 +176,10 @@ def load_model_weights_csv(path: Path, vocab_size: int) -> list[list[float]]:
             # row[0] is input token label; row[1:] are numeric weights
             weights.append([float(x) for x in row[1:]])
 
-    if len(weights) != vocab_size:
+    # Unigram has exactly 1 row
+    if len(weights) != 1:
         raise ValueError(
-            f"Weights CSV row count mismatch. Expected {vocab_size} rows but found {len(weights)}."
+            f"Unigram weights CSV should have 1 row but found {len(weights)}."
         )
 
     return weights
@@ -191,19 +195,17 @@ def top_k(probs: list[float], k: int) -> list[tuple[int, float]]:
 def generate_tokens_unigram(
     model: SimpleNextTokenModel,
     vocab: ArtifactVocabulary,
-    start_token: str,
     num_tokens: int,
 ) -> list[str]:
-    """Generate tokens using a unigram context (current token only)."""
-    generated: list[str] = [start_token]
-    current_id: int | None = vocab.get_token_id(start_token)
+    """Generate tokens using unigram (no context - same prediction every time).
 
-    if current_id is None:
-        LOG.error(f"Start token not in vocabulary: {start_token!r}")
-        return generated
+    Note: Unigram ignores all context, so there's no start token.
+    Every generated token will be the same (the most frequent word).
+    """
+    generated: list[str] = []
 
     for _ in range(num_tokens):
-        probs: list[float] = model.forward(current_id)
+        probs: list[float] = model.forward()  # no input - unigram ignores context
         next_id: int = argmax(probs)
         next_token: str | None = vocab.get_id_token(next_id)
 
@@ -212,14 +214,33 @@ def generate_tokens_unigram(
             break
 
         generated.append(next_token)
-        current_id = next_id
 
     return generated
 
 
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments for inference."""
+    parser = argparse.ArgumentParser(
+        description="Run inference using saved training artifacts (unigram)."
+    )
+    parser.add_argument(
+        "--num-tokens",
+        type=int,
+        default=10,
+        help="Number of tokens to generate (default: 10).",
+    )
+    parser.add_argument(
+        "--topk",
+        type=int,
+        default=3,
+        help="Number of top predictions to display (default: 3).",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
     """Run inference using saved training artifacts."""
-    log_header(LOG, "Inference Demo: Load Artifacts and Generate Text")
+    log_header(LOG, "Inference Demo: Load Artifacts and Generate Text (Unigram)")
 
     base_dir: Final[Path] = Path(__file__).resolve().parents[2]
     artifacts_dir: Final[Path] = base_dir / "artifacts"
@@ -236,41 +257,33 @@ def main() -> None:
     meta: JsonObject = load_meta(meta_path)
     vocab: ArtifactVocabulary = load_vocabulary_csv(vocab_path)
 
-    model: SimpleNextTokenModel = SimpleNextTokenModel(vocab_size=vocab.vocab_size())
-    model.weights = load_model_weights_csv(weights_path, vocab_size=vocab.vocab_size())
+    v: int = vocab.vocab_size()
+    model: SimpleNextTokenModel = SimpleNextTokenModel(vocab_size=v)
+    model.weights = load_model_weights_csv(weights_path, vocab_size=v)
 
     args: argparse.Namespace = parse_args()
-
-    # Choose a start token.
-    start_token: str = args.start_token
-    if not start_token:
-        # Deterministic fallback: smallest token_id present
-        first_id: int = min(vocab.id_to_token.keys())
-        start_token = vocab.id_to_token[first_id]
 
     LOG.info(
         f"Loaded repo_name={meta.get('repo_name')} model_kind={meta.get('model_kind')}"
     )
-    LOG.info(f"Vocab size: {vocab.vocab_size()}")
-    LOG.info(f"Start token: {start_token!r}")
+    LOG.info(f"Vocab size: {v}")
+    LOG.info("Unigram model: predictions are the same regardless of input.")
 
-    start_id = vocab.get_token_id(start_token)
-    if start_id is not None:
-        probs: list[float] = model.forward(current_id=start_id)
-        LOG.info(f"Top next-token predictions after {start_token!r}:")
-        for tok_id, prob in top_k(probs, k=max(1, args.topk)):
-            tok: str | None = vocab.get_id_token(tok_id)
-            LOG.info(f"  {tok!r} (ID {tok_id}): {prob:.4f}")
+    # Show predictions (same for any input)
+    probs: list[float] = model.forward()
+    LOG.info("Top next-token predictions (based on corpus frequency):")
+    for tok_id, prob in top_k(probs, k=max(1, args.topk)):
+        tok: str | None = vocab.get_id_token(tok_id)
+        LOG.info(f"  {tok!r} (ID {tok_id}): {prob:.4f}")
 
     generated: list[str] = generate_tokens_unigram(
         model=model,
         vocab=vocab,
-        start_token=start_token,
         num_tokens=max(0, args.num_tokens),
     )
 
     LOG.info("Generated sequence:")
-    LOG.info("  " + " ".join(generated))
+    LOG.info(f"  {' '.join(generated)}")
 
 
 if __name__ == "__main__":
