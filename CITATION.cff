@@ -6,8 +6,8 @@ cff-version: "1.2.0"
 type: software
 
 title: "Toy-GPT: Unigram Next-Token Language Model with Neutral Corpus"
-version: "0.9.3"
-date-released: "2026-01-17"
+version: "0.9.5"
+date-released: "2026-01-18"
 
 authors:
   - family-names: Case
@@ -20,12 +20,11 @@ url: "https://github.com/toy-gpt/train-100-unigram"
 license: MIT
 
 abstract: >
-  Inspectable language-model training repositories demonstrating
-  next-token prediction across controlled corpus regimes.
+  Toy-GPT is an educational sequence of minimal language-model training repositories.
   This repository implements a unigram next-token prediction model trained with
   softmax and cross-entropy loss on an intentionally neutral corpus.
-  It assists with understanding probabilistic language modeling,
-  training loops, and inspectable model artifacts
+  It serves as a baseline for understanding
+  probabilistic language modeling, training loops, and inspectable model artifacts
   prior to introducing higher-order context, embeddings, or attention mechanisms.
 
 keywords:

@@ -27,7 +27,8 @@ from typing import Final
 from datafun_toolkit.logger import get_logger, log_header
 
 from toy_gpt_train.c_model import SimpleNextTokenModel
-from toy_gpt_train.d_train import argmax
+from toy_gpt_train.math_training import argmax
+from toy_gpt_train.prompts import parse_args
 
 __all__ = [
     "ArtifactVocabulary",
@@ -214,34 +215,6 @@ def generate_tokens_unigram(
         current_id = next_id
 
     return generated
-
-
-def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        description="Toy GPT inference from saved artifacts."
-    )
-    parser.add_argument(
-        "--start",
-        dest="start_token",
-        default="",
-        help="Start token for generation. If omitted, uses the first token in the vocabulary.",
-    )
-    parser.add_argument(
-        "--num",
-        dest="num_tokens",
-        type=int,
-        default=10,
-        help="Number of tokens to generate (not counting the start token).",
-    )
-    parser.add_argument(
-        "--topk",
-        dest="topk",
-        type=int,
-        default=3,
-        help="Show top-k next-token probabilities for the start token.",
-    )
-    return parser.parse_args()
 
 
 def main() -> None:

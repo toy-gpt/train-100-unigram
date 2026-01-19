@@ -125,6 +125,20 @@ type JsonObject = dict[str, JsonValue]
 LOG: logging.Logger = get_logger("IO", level="INFO")
 
 
+def _fmt_float(value: float, *, decimals: int = 4) -> str:
+    """Format a float for CSV output.
+
+    Policy:
+    - Exact zeros are written as "0"
+    - Nonzero values are written with fixed decimal precision
+
+    Keeps artifacts readable and reduces file size.
+    """
+    if value == 0.0:
+        return "0"
+    return f"{value:.{decimals}f}"
+
+
 class VocabularyLike(Protocol):
     """Protocol for vocabulary-like objects used in training and artifacts."""
 
@@ -167,7 +181,7 @@ def find_single_corpus_file(corpus_dir: Path) -> Path:
         msg = f"Corpus directory not found: {corpus_dir}"
         raise FileNotFoundError(msg)
 
-    files = [p for p in corpus_dir.iterdir() if p.is_file()]
+    files = sorted([p for p in corpus_dir.iterdir() if p.is_file()])
     if len(files) == 0:
         msg = f"No files found in corpus directory: {corpus_dir}"
         raise FileNotFoundError(msg)
@@ -282,7 +296,13 @@ def write_meta_json(
     artifact_paths = artifact_paths_from_base_dir(base_dir)
 
     repo_name = repo_name_from_base_dir(base_dir)
-    corpus_rel = str(corpus_path.resolve().relative_to(base_dir.resolve()))
+    base_resolved = base_dir.resolve()
+    corpus_resolved = corpus_path.resolve()
+    try:
+        corpus_rel = str(corpus_resolved.relative_to(base_resolved))
+    except ValueError:
+        corpus_rel = str(corpus_resolved)
+
     corpus_text = corpus_path.read_text(encoding="utf-8")
     corpus_lines = [ln for ln in corpus_text.splitlines() if ln.strip()]
 
@@ -367,30 +387,30 @@ def write_model_weights_csv(
     """Write 02_model_weights.csv with token-labeled columns.
 
     Shape:
-        - first column: input_token
-        - remaining columns: one per output token (header names are tokens)
+        - first column: input_token (serialized context label)
+        - remaining columns: one per output token (weights)
 
-    Args:
-        path: Output CSV path.
-        vocab: Vocabulary instance (must provide vocab_size(), get_id_token()).
-        model: Trained model (must provide vocab_size and weights).
-        row_labeler: Function that maps a model weight-row index to a label
-            written in the first column.
+    Notes:
+        - Tokens may be typed internally.
+        - This function serializes all token labels explicitly at the I/O boundary.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Header: output-token labels (serialized)
     out_tokens: list[str] = []
     for j in range(vocab.vocab_size()):
         tok = vocab.get_id_token(j)
-        out_tokens.append(tok if tok is not None else f"id_{j}")
+        out_tokens.append(str(tok) if tok is not None else f"id_{j}")
 
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["input_token"] + out_tokens)
 
         for row_idx, row in enumerate(model.weights):
-            input_token = row_labeler(row_idx)
-            writer.writerow([input_token] + [f"{w:.8f}" for w in row])
+            # Serialize row label explicitly (may be a typed token/context)
+            input_label = str(row_labeler(row_idx))
+
+            writer.writerow([input_label] + [_fmt_float(w, decimals=4) for w in row])
 
     LOG.info(f"Wrote model weights to {path}")
 
@@ -401,7 +421,21 @@ def write_token_embeddings_csv(
     *,
     row_labeler: RowLabeler,
 ) -> None:
-    """Write 03_token_embeddings.csv as a simple 2D projection for plotting."""
+    """Write 03_token_embeddings.csv as a simple 2D projection.
+
+    This file is a derived visualization artifact, not a learned embedding table.
+
+    For each model weight row:
+        - x coordinate = first weight (if present)
+        - y coordinate = second weight (if present)
+
+    If a row has fewer than two weights, missing values default to 0.0.
+
+    Args:
+        path: Output CSV path.
+        model: Trained model providing a weight matrix.
+        row_labeler: Function mapping row index to a human-readable label.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
 
     with path.open("w", encoding="utf-8", newline="") as f:
@@ -409,9 +443,20 @@ def write_token_embeddings_csv(
         writer.writerow(["row", "label", "x", "y"])
 
         for row_idx, row in enumerate(model.weights):
-            x = row[0] if len(row) >= 1 else 0.0
-            y = row[1] if len(row) >= 2 else 0.0
-            writer.writerow([row_idx, row_labeler(row_idx), f"{x:.8f}", f"{y:.8f}"])
+            # Defensive defaults
+            x: float = row[0] if len(row) >= 1 else 0.0
+            y: float = row[1] if len(row) >= 2 else 0.0
+
+            writer.writerow(
+                [
+                    row_idx,
+                    row_labeler(row_idx),
+                    _fmt_float(x, decimals=4),
+                    _fmt_float(y, decimals=4),
+                ]
+            )
+
+    LOG.info(f"Wrote token embeddings to {path}")
 
 
 def write_training_log(path: Path, history: list[dict[str, float]]) -> None:
