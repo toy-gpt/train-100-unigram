@@ -47,6 +47,20 @@ jobs:
           fetch-tags: true
           ref: ${{ github.ref }}
 
+      - name: A1 debug) Show tag/commit state used for versioning
+        shell: bash
+        run: |
+          set -e
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_REF_NAME=$GITHUB_REF_NAME"
+          git log -1 --oneline
+          echo "Tags pointing at HEAD:"
+          git tag --points-at HEAD || true
+          echo "Describe:"
+          git describe --tags --dirty --long || true
+          echo "All tags (top 20):"
+          git tag --sort=-creatordate | head -n 20
+
       - name: A2) Install uv (with caching)
         uses: astral-sh/setup-uv@v7
         with:
