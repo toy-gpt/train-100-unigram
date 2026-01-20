@@ -48,7 +48,7 @@ dependencies = [
 # WHY: Optional dependency groups keep the core install clean and focused.
 dev = [
     # REQ.DEV.DEPS: External packages used for linting, testing, type checking, etc.
-    "bandit>=1.9.2",
+    "bandit>=1.9.3",
     "deptry>=0.10.1",
     "packaging>=25.0",
     "pre-commit>=4.5.1",
