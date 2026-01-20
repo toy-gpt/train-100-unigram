@@ -104,10 +104,29 @@ jobs:
       - name: D0) Remove any stale _version.py (setuptools-scm regenerates)
         run: rm -f src/*/_version.py src/*/*/_version.py
 
+      - name: D0) Clean any cached builds
+        run: |
+          rm -rf dist/ build/ *.egg-info src/*.egg-info
+
       - name: D1) Extract plain version from tag (no leading 'v')
         id: ver
         shell: bash
         run: echo "plain=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: D1 Debug) setuptools-scm debug info
+        run: |
+          echo "=== Current HEAD ==="
+          git rev-parse HEAD
+          echo "=== Git describe ==="
+          git describe --tags --always --dirty --long
+          echo "=== All refs ==="
+          git show-ref | head -20
+          echo "=== setuptools-scm direct call ==="
+          uv run python -c "from setuptools_scm import get_version; print('SCM version:', get_version())"
+          echo "=== Check .git directory ==="
+          ls -la .git
+          echo "=== Is this a shallow clone? ==="
+          git rev-parse --is-shallow-repository
 
       - name: D2) Build sdist + wheel
         run: uv build
