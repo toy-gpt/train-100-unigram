@@ -101,6 +101,9 @@ jobs:
 
       # === DEPLOY  (BUILD, RELEASE, DOCS, PACKAGE) ===
 
+      - name: D0) Remove any stale _version.py (setuptools-scm regenerates)
+        run: rm -f src/*/_version.py src/*/*/_version.py
+
       - name: D1) Extract plain version from tag (no leading 'v')
         id: ver
         shell: bash
