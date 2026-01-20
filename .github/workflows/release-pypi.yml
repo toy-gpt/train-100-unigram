@@ -38,156 +38,126 @@ jobs:
     environment: pypi # WHY: Use 'pypi' environment for PyPI publishing; ignore warnings.
 
     steps:
-      # === ASSEMBLE ===
+          # === ASSEMBLE ===
 
-      - name: A1) Checkout this repository with full history and tags
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          fetch-tags: true
-          ref: ${{ github.ref }}
+          - name: A1) Checkout this repository with full history and tags
+            uses: actions/checkout@v6
+            with:
+              fetch-depth: 0
+              fetch-tags: true
+              ref: ${{ github.ref }}
 
-      - name: A1 debug) Show tag/commit state used for versioning
-        shell: bash
-        run: |
-          set -e
-          echo "GITHUB_REF=$GITHUB_REF"
-          echo "GITHUB_REF_NAME=$GITHUB_REF_NAME"
-          git log -1 --oneline
-          echo "Tags pointing at HEAD:"
-          git tag --points-at HEAD || true
-          echo "Describe:"
-          git describe --tags --dirty --long || true
-          echo "All tags (top 20):"
-          git tag --sort=-creatordate | head -n 20
+          - name: A2) Install uv (with caching)
+            uses: astral-sh/setup-uv@v7
+            with:
+              enable-cache: true
 
-      - name: A2) Install uv (with caching)
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
+          - name: A3) Setup Python 3.14
+            uses: actions/setup-python@v6
+            with:
+              python-version: "3.14"
 
-      - name: A3) Setup Python 3.14
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
+          - name: A4) Display versions
+            run: |
+              python --version
+              uv --version
 
-      - name: A4) Display versions
-        run: |
-          python --version
-          uv --version
+          # === BUILD FIRST (while git is pristine) ===
 
-      - name: A5) Sync to install all dependencies
-        # REQ: docs extra MUST include mike (and mkdocs stack).
-        # REQ: dev extra SHOULD include ruff/pyright/pytest/deptry/twine (as used below).
-        run: |
-          uv sync --extra dev --extra docs --upgrade
+          - name: B1) Extract plain version from tag (no leading 'v')
+            id: ver
+            shell: bash
+            run: echo "plain=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      # === BASELINE CHECKS (VALIDATE ONLY) ===
+          - name: B2) Verify git is clean before build
+            run: |
+              echo "Git status:"
+              git status --short
+              echo "Git describe:"
+              git describe --tags --always --dirty
+              if [[ $(git status --porcelain) ]]; then
+                echo "ERROR: Git tree is dirty before build!"
+                exit 1
+              fi
 
-      - name: B1) Ruff format (check only)
-        run: uv run ruff format --check .
+          - name: B3) Build sdist + wheel
+            run: uv build
 
-      - name: B2) Ruff lint (no fixes)
-        run: uv run ruff check .
+          - name: B4) Ensure built artifact version matches tag
+            shell: bash
+            run: |
+              set -e
+              TAG="${{ steps.ver.outputs.plain }}"
+              echo "Tag version: $TAG"
+              ls dist
+              if ! ls dist/*"$TAG"*.whl dist/*"$TAG"*.tar.gz >/dev/null 2>&1; then
+                echo "ERROR: Built artifact version does not match tag $TAG"
+                exit 1
+              fi
+              echo "Artifact version matches tag."
 
-      - name: B3) Validate project.toml
-        run: uvx validate-pyproject
+          # === INSTALL DEPS (after build, may modify working tree) ===
 
-      - name: B4) Pyright (type check)
-        run: uv run pyright
+          - name: C1) Sync to install all dependencies
+            run: uv sync --extra dev --extra docs --upgrade
 
-      - name: B5) Deptry (dependency check)
-        run: uvx deptry .
+          # === CHECKS ===
 
-      # === DEPLOY  (BUILD, RELEASE, DOCS, PACKAGE) ===
+          - name: C2) Ruff format (check only)
+            run: uv run ruff format --check .
 
-      - name: D0) Remove any stale _version.py (setuptools-scm regenerates)
-        run: rm -f src/*/_version.py src/*/*/_version.py
+          - name: C3) Ruff lint (no fixes)
+            run: uv run ruff check .
 
-      - name: D0) Clean any cached builds
-        run: |
-          rm -rf dist/ build/ *.egg-info src/*.egg-info
+          - name: C4) Validate pyproject.toml
+            run: uvx validate-pyproject
 
-      - name: D1) Extract plain version from tag (no leading 'v')
-        id: ver
-        shell: bash
-        run: echo "plain=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          - name: C5) Pyright (type check)
+            run: uv run pyright
 
-      - name: D1 Debug) setuptools-scm debug info
-        run: |
-          echo "=== Current HEAD ==="
-          git rev-parse HEAD
-          echo "=== Git describe ==="
-          git describe --tags --always --dirty --long
-          echo "=== All refs ==="
-          git show-ref | head -20
-          echo "=== setuptools-scm direct call ==="
-          uv run python -c "from setuptools_scm import get_version; print('SCM version:', get_version())"
-          echo "=== Check .git directory ==="
-          ls -la .git
-          echo "=== Is this a shallow clone? ==="
-          git rev-parse --is-shallow-repository
+          - name: C6) Deptry (dependency check)
+            run: uvx deptry .
 
-      - name: D2) Build sdist + wheel
-        run: uv build
+          - name: C7) Validate built artifacts
+            run: uv run twine check dist/*
 
-      - name: D3) Ensure built artifact version matches tag
-        shell: bash
-        run: |
-          set -e
-          TAG="${{ steps.ver.outputs.plain }}"
-          echo "Tag version: $TAG"
-          ls dist
-          # Check that at least one artifact embeds the same version
-          if ! ls dist/*"$TAG"*.whl dist/*"$TAG"*.tar.gz >/dev/null 2>&1; then
-            echo "ERROR: Built artifact version does not match tag $TAG"
-            exit 1
-          fi
-          echo "Artifact version matches tag."
+          # === RELEASE ===
 
-      - name: D4) Validate built artifacts
-        run: uv run twine check dist/*
+          - name: D1) Create GitHub Release and upload artifacts
+            uses: softprops/action-gh-release@v2
+            with:
+              tag_name: ${{ github.ref_name }}
+              name: ${{ github.ref_name }}
+              generate_release_notes: true
+              files: |
+                dist/*.whl
+                dist/*.tar.gz
+              draft: false
+              prerelease: false
+              make_latest: true
 
-      - name: D5) List dist artifacts
-        run: ls -lah dist
+          - name: D2) Publish to PyPI (Trusted Publishing)
+            uses: pypa/gh-action-pypi-publish@release/v1
 
-      - name: D6) Create GitHub Release and upload artifacts
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }} # e.g., vx.y.z
-          name: ${{ github.ref_name }}
-          generate_release_notes: true
-          files: |
-            dist/*.whl
-            dist/*.tar.gz
-          draft: false
-          prerelease: false
-          make_latest: true
+          # === DOCS (modifies working tree - must be after build) ===
 
-      - name: D7) Publish to PyPI (Trusted Publishing)
-        uses: pypa/gh-action-pypi-publish@release/v1
+          - name: E1) Fetch organization MkDocs base config
+            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+            run: curl -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
 
-      # === DOCS (MIKE VERSIONED DOCS) ===
+          - name: E2) Configure git identity for mike
+            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+            run: |
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: D8) Fetch organization MkDocs base config
-        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-        run: curl -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
+          - name: E3) Deploy docs for this version and update latest alias
+            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+            run: |
+              VERSION="${{ steps.ver.outputs.plain }}"
+              uv run mike deploy --push --update-aliases "$VERSION" latest
+              uv run mike set-default --push latest
 
-      - name: D9) Configure git identity for mike
-        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: D10) Deploy docs for this version and update latest alias
-        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-        run: |
-          set -e
-          VERSION="${{ steps.ver.outputs.plain }}"
-          echo "Deploying docs for version: $VERSION"
-          uv run mike deploy --push --update-aliases "$VERSION" latest
-          uv run mike set-default --push latest
-
-      - name: D11) Show mike versions (after)
-        if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-        run: uv run mike list
+          - name: E4) Show mike versions
+            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
+            run: uv run mike list
