@@ -1,9 +1,9 @@
 # ============================================================
-# .github/workflows/release-pypi.yml (Release PyPI + versioned docs via mike)
+# .github/workflows/release-pypi-mkdocs-shared.yml
+# (Release PyPI + versioned docs via mike using shared MkDocs config)
 # ============================================================
-# Variant: org-mkdocs
 # SOURCE: https://github.com/denisecase/templates
-# OBS: Fetches org-wide MkDocs base config at run time (network dependency).
+# OBS: Fetches shared MkDocs base config at run time (network dependency).
 # REQ: The referenced raw URL must remain public/accessible to GitHub Actions.
 # WHY: Keeps documentation theming/config consistent across org repositories.
 
@@ -11,12 +11,13 @@
 # REQ: Repo Settings -> Pages -> Build and deployment -> Source:
 #      GitHub Actions
 
-name: Release (PyPI + versioned docs via mike)
+name: Release (PyPI + versioned docs via mike using shared config)
 
 # WHY: Publish a tagged release to PyPI and deploy versioned docs using mike.
 # REQ: Trigger ONLY on version tags like v1.2.3.
 # REQ: PyPI project must be configured for Trusted Publishing (OIDC).
 # REQ: mike requires a gh-pages branch (mike writes versioned docs there).
+# REQ: uv build must run before anything that modifies the working tree (including uv sync).
 
 on:
   push:
@@ -31,16 +32,21 @@ env:
   PYTHONUNBUFFERED: "1" # WHY: Real-time logging.
   PYTHONIOENCODING: "utf-8" # WHY: Ensure UTF-8 encoding so docs with international characters work.
 
+concurrency:
+  # WHY: Prevent concurrent releases; wait for previous to complete.
+  group: release-${{ github.ref }}
+  cancel-in-progress: false  # WHY: Never cancel a release in progress
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 30 # WHY: Prevent hanging jobs. If over, it is likely stuck.
     environment: pypi # WHY: Use 'pypi' environment for PyPI publishing; ignore warnings.
 
     steps:
           # === ASSEMBLE ===
 
-          - name: A1) Checkout this repository with full history and tags
+          - name: A1) Checkout repository with full history and tags
             uses: actions/checkout@v6
             with:
               fetch-depth: 0
@@ -52,17 +58,19 @@ jobs:
             with:
               enable-cache: true
 
-          - name: A3) Setup Python 3.14
+          - name: A3) Setup Python 3.14 (builds packages)
+            # WHY: Ensure consistent Python version for release.
             uses: actions/setup-python@v6
             with:
               python-version: "3.14"
 
           - name: A4) Display versions
+            # WHY: Confirm correct versions are in use.
             run: |
               python --version
               uv --version
 
-          # === BUILD FIRST (while git is pristine) ===
+          # === BASELINE CHECKS (build while git is pristine) ===
 
           - name: B1) Extract plain version from tag (no leading 'v')
             id: ver
@@ -96,12 +104,10 @@ jobs:
               fi
               echo "Artifact version matches tag."
 
-          # === INSTALL DEPS (after build, may modify working tree) ===
+          # === CHECKS and INSTALL DEPS (after build, may modify working tree) ===
 
           - name: C1) Sync to install all dependencies
             run: uv sync --extra dev --extra docs --upgrade
-
-          # === CHECKS ===
 
           - name: C2) Ruff format (check only)
             run: uv run ruff format --check .
@@ -121,9 +127,15 @@ jobs:
           - name: C7) Validate built artifacts
             run: uv run twine check dist/*
 
-          # === RELEASE ===
+          # === DEPLOY RELEASE AND DOCS ===
 
-          - name: D1) Create GitHub Release and upload artifacts
+          - name: D1) Fetch organization MkDocs base config
+            run: curl --fail -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
+
+          - name: D2) Build docs (validate before deploy)
+            run: uv run mkdocs build --strict
+
+          - name: D3) Create GitHub Release and upload artifacts
             uses: softprops/action-gh-release@v2
             with:
               tag_name: ${{ github.ref_name }}
@@ -136,28 +148,24 @@ jobs:
               prerelease: false
               make_latest: true
 
-          - name: D2) Publish to PyPI (Trusted Publishing)
+          - name: D4) Publish to PyPI (Trusted Publishing)
             uses: pypa/gh-action-pypi-publish@release/v1
 
           # === DOCS (modifies working tree - must be after build) ===
 
-          - name: E1) Fetch organization MkDocs base config
-            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-            run: curl -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
-
-          - name: E2) Configure git identity for mike
+          - name: D5) Configure git identity for mike
             if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
             run: |
               git config user.name "github-actions[bot]"
               git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          - name: E3) Deploy docs for this version and update latest alias
+          - name: D6) Deploy docs for this version and update latest alias
             if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
             run: |
               VERSION="${{ steps.ver.outputs.plain }}"
               uv run mike deploy --push --update-aliases "$VERSION" latest
               uv run mike set-default --push latest
 
-          - name: E4) Show mike versions
+          - name: D7) Show mike versions
             if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
             run: uv run mike list

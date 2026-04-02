@@ -1,9 +1,9 @@
 # ============================================================
-# .github/workflows/ci-python-mkdocs.yml (Continuous Integration)
+# .github/workflows/ci-python-mkdocs-shared.yml
+# (Continuous Integration includes MkDocs with shared config)
 # ============================================================
-# Variant: org-mkdocs
 # SOURCE: https://github.com/denisecase/templates
-# OBS: Fetches org-wide MkDocs base config at run time (network dependency).
+# OBS: Fetches shared MkDocs base config at run time (network dependency).
 # REQ: The referenced raw URL must remain public/accessible to GitHub Actions.
 # WHY: Keeps documentation theming/config consistent across org repositories.
 
@@ -12,7 +12,7 @@
 # REQ: CI MUST NOT introduce arbitrary rules that are not reproducible locally.
 # OBS: CI validates only; it never edits files or deploys docs.
 
-name: CI (Python + MkDocs)
+name: CI (Python + MkDocs Shared Config)
 
 on:
   push:
@@ -35,12 +35,9 @@ jobs:
     timeout-minutes: 30 # WHY: Prevent hanging jobs. If over time, it is likely stuck.
 
     steps:
-      # ============================================================
-      # ASSEMBLE: Get code and set up environment
-      # ============================================================
+      # === ASSEMBLE ===
 
       - name: A1) Checkout repository code
-        # WHY: Needed to access files for checks.
         uses: actions/checkout@v6
 
       - name: A2) Run pre-commit (all files)
@@ -71,25 +68,30 @@ jobs:
           python --version
           uv --version
 
-      - name: A6) Sync to install all dependencies
+      # === BASELINE CHECKS ===
+
+      - name: B1) Sync to install all dependencies
         run: uv sync --extra dev --extra docs --upgrade
 
-      # ============================================================
-      # === BASELINE CHECKS ===
-      # ============================================================
-
-      - name: B1) validate-pyproject (must be in pyproject.toml deps)
+      - name: B2) validate-pyproject (must be in pyproject.toml deps)
         run: uv run validate-pyproject pyproject.toml
 
-      - name: B2) Ruff format (check only; no fixes)
+      - name: B3) Ruff format (check only; no fixes)
         run: uv run ruff format --check --diff .
 
-      - name: B3) Ruff lint (no fixes)
+      - name: B4) Ruff lint (no fixes)
         run: uv run ruff check .
 
-      # ============================================================
+      - name: B5) Validate pyproject.toml
+        run: uvx validate-pyproject
+
+      - name: B6) Pyright (type check)
+        run: uv run pyright
+
+      - name: B7) Deptry (dependency check)
+        run: uvx deptry .
+
       # === COVERAGE AND TESTS: Verify functionality ===
-      # ============================================================
 
       - name: C1) Run pytest with coverage
         run: |
@@ -123,23 +125,23 @@ jobs:
           path: coverage.xml
           retention-days: 30
 
-      # ============================================================
-      # === DEPLOY: Build only, don't deploy yet ===
-      # ============================================================
+      # === DOCS VALIDATION ===
 
-      - name: D0) Fetch organization MkDocs base config
+      - name: D1) Fail if no MkDocs configuration
         run: |
           if [ -f "mkdocs.yml" ] || [ -f "mkdocs.yaml" ]; then
-            curl -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
+            echo "MkDocs configuration found. Proceeding."
           else
-            echo "No mkdocs config found; skipping remote fetch."
+            echo "ERROR: mkdocs.yml not found."
+            echo "If you do not want documentation deployment,"
+            echo "delete .github/workflows/deploy-docs.yml (or add mkdocs.yml)."
+            exit 1
           fi
 
-      - name: D1) Build docs (mkdocs --strict)
+      - name: D2) Fetch shared MkDocs base config
+        run: curl --fail -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
+
+
+      - name: D3) Build docs (--strict)
         id: build-docs
-        run: |
-          if [ -f "mkdocs.yml" ] || [ -f "mkdocs.yaml" ]; then
-            uv run mkdocs build --strict --verbose
-          else
-            echo "No mkdocs config found; skipping docs build."
-          fi
+        run: uv run mkdocs build --strict

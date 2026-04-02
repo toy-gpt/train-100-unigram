@@ -41,32 +41,32 @@ classifiers = [
 
 dependencies = [
     # REQ.DEPS: External packages used by the project code.
-    "datafun-toolkit>=0.9.5",
+    "datafun-toolkit",
 ]
 
 [project.optional-dependencies]
 # WHY: Optional dependency groups keep the core install clean and focused.
 dev = [
     # REQ.DEV.DEPS: External packages used for linting, testing, type checking, etc.
-    "bandit>=1.9.3",
-    "deptry>=0.10.1",
-    "packaging>=25.0",
-    "pre-commit>=4.5.1",
-    "pytest>=9.0.2",
-    "pytest-cov>=7.0.0",
-    "pyright>=1.1.408",
-    "ruff>=0.14.13",
-    "twine>=6.2.0",
-    "validate-pyproject>=0.24.1",
+    "bandit",
+    "deptry",
+    "packaging",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "pyright",
+    "ruff",
+    "twine",
+    "validate-pyproject",
 ]
 
 docs = [
     # REQ.DOCS.DEPS: External packages used to generate project documentation.
-    "mike>=2.1.3",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.7.1",
-    "mkdocs-static-i18n>=1.3.0",
-    "mkdocstrings[python]>=1.0.0",
+    "mike",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-static-i18n",
+    "mkdocstrings[python]",
 ]
 
 [project.urls]
@@ -78,29 +78,18 @@ Repository = "https://github.com/toy-gpt/train-100-unigram"
 
 # === DEPTRY (CHECK FOR UNDECLARED OR UNUSED DEPENDENCIES) ===
 
-[tool.deptry.per_rule_ignores]
-DEP001 = ["toy_gpt_train"]
-DEP002 = [
-    # === DEV TOOLING (not required at runtime) ===
-    "bandit",
-    "deptry",
-    "packaging",
-    "pre-commit",
-    "pytest",
-    "pytest-cov",
-    "pyright",
-    "ruff",
-    "twine",
-    "validate-pyproject",
+[tool.deptry]
+# WHY: Dev and docs dependencies are not imported in source code.
+ignore = ["DEP002"]
 
-    # === DOCUMENTATION TOOLING (not required at runtime) ===
-    "mike",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-static-i18n",
-    "mkdocstrings[python]",
-    "mkdocstrings",         # WHY: Needed for [python] extra (above).
-]
+[tool.deptry.package_module_name_map]
+# WHY: PyPI package names differ from importable module names.
+# CUSTOM: Add project dependencies here as needed.
+"toy-gpt-train-100-unigram" = "toy_gpt_train"
+
+[tool.deptry.per_rule_ignores]
+# CUSTOM: Add self-import package here to avoid false positives.
+DEP001 = ["toy_gpt_train"]
 DEP003 = ["toy_gpt_train"]
 
 # === PYRIGHT (TYPE CHECKING HELPS FIND COMMON ERRORS BEFORE THE CODE RUNS) ===
