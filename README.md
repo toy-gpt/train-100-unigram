@@ -69,6 +69,53 @@ uv run python src/toy_gpt_train/d_train.py
 uv run python src/toy_gpt_train/e_infer.py
 ```
 
+## Command Reference
+
+The commands below are used in the workflow guide above.
+They are provided here for convenience.
+
+Follow the guide for the **full instructions**.
+
+<details>
+<summary>Show command reference</summary>
+
+### In a machine terminal (open in your `Repos` folder)
+
+After you get a copy of this repo in your own GitHub account,
+open a machine terminal in your `Repos` folder:
+
+```shell
+# Replace username with YOUR GitHub username.
+git clone https://github.com/username/train-100-unigram
+
+cd train-100-unigram
+code .
+```
+
+### In a VS Code terminal
+
+```shell
+uv self update
+uv python pin 3.14
+uv sync --extra dev --extra docs --upgrade
+
+uvx pre-commit install
+git add -A
+uvx pre-commit run --all-files
+
+uv run python -m cintel.case_drift_detector
+
+uv run ruff format .
+uv run ruff check . --fix
+uv run zensical build
+
+git add -A
+git commit -m "update"
+git push -u origin main
+```
+
+</details>
+
 ## Provenance and Purpose
 
 The primary corpus used for training is declared in `SE_MANIFEST.toml`.

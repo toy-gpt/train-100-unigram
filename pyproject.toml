@@ -62,11 +62,8 @@ dev = [
 
 docs = [
     # REQ.DOCS.DEPS: External packages used to generate project documentation.
-    "mike",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-static-i18n",
     "mkdocstrings[python]",
+    "zensical",
 ]
 
 [project.urls]
