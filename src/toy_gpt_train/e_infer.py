@@ -261,7 +261,7 @@ def main() -> None:
     model: SimpleNextTokenModel = SimpleNextTokenModel(vocab_size=v)
     model.weights = load_model_weights_csv(weights_path, vocab_size=v)
 
-    args: argparse.Namespace = parse_args()
+    args: argparse.Namespace = parse_args([])
 
     LOG.info(
         f"Loaded repo_name={meta.get('repo_name')} model_kind={meta.get('model_kind')}"
