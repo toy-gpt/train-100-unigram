@@ -13,6 +13,14 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [0.9.7] - 2026-04-02
+
+### Updated
+
+- General updates and arg parse signature.
+
+---
+
 ## [0.9.6] - 2026-01-18
 
 ### Updated
@@ -66,14 +74,15 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ```shell
 # if deleting is required
-git tag -d v0.9.0
-git push origin :refs/tags/v0.9.0
+git tag -d v0.9.7
+git push origin :refs/tags/v0.9.7
 # adding a tag example
-git tag v0.9.0 -m "0.9.0"
-git push origin v0.9.0
+git tag v0.9.7 -m "0.9.7"
+git push origin v0.9.7
 ```
 
-[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.6...HEAD
+[Unreleased]: https://github.com/toy-gpt/train-100-unigram/compare/v0.9.7...HEAD
+[0.9.7]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.7
 [0.9.6]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.6
 [0.9.5]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.5
 [0.9.3]: https://github.com/toy-gpt/train-100-unigram/releases/tag/v0.9.3
