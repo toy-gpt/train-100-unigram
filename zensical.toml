@@ -1,0 +1,63 @@
+# ============================================================
+# zensical.toml (Zensical configuration file)
+# ============================================================
+# WHY: Project documentation configuration for Zensical.
+# OBS: Theme and plugin defaults are shared from docs-theme/zensical.base.toml in toy-gpt/.github.
+
+# ------------------------------------------------------------
+# Project (CUSTOM: change repo names and URLs to match project)
+# ------------------------------------------------------------
+[project]
+site_name = "Toy GPT"
+site_url = "https://toy-gpt.github.io/train-100-unigram/"
+repo_url = "https://github.com/toy-gpt/train-100-unigram"
+repo_name = "toy-gpt/train-100-unigram"
+site_description = "Project documentation"
+docs_dir = "docs" # source directory for documentation markdown files
+site_dir = "site" # output directory for generated site (ignored by Git; not in repo)
+edit_uri = "edit/main/docs/" # "Edit this page" links (GitHub)
+
+[project.extra]
+# WHY: Social links provide easy access to project repositories and profiles.
+social = [
+    {icon = "fontawesome/brands/github", link = "https://github.com/toy-gpt/train-100-unigram" },
+]
+
+# ------------------------------------------------------------
+# Plugins (Rarely edited; add new plugins as needed)
+# ------------------------------------------------------------
+[project.plugins.search]
+lang = "en" # WHY: Search plugin provides instant search functionality for documentation.
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"] # WHY: MkDocstrings auto-generates documentation from code; this points it to the source code directory.
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google" # WHY: Google style docstrings are widely used and supported by many tools, including Zensical's AI-assisted generation.
+show_source = true # WHY: Showing source code in documentation can help users understand implementation details.
+show_root_heading = true
+show_root_toc_entry = true
+show_signature_annotations = true
+separate_signature = true
+
+[project.theme]
+# SEE: https://zensical.org/docs/setup/navigation/#instant-navigation-zensicaltoml
+features = [
+    "navigation.tracking", # WHY: Tracking allows for analytics on how users interact with the documentation, which can inform improvements.
+    "navigation.expand", # WHY: Expandable navigation allows users to focus on relevant sections while keeping the overall structure accessible.
+    "navigation.path", # WHY: Path navigation helps users understand their location within the documentation hierarchy.
+    "navigation.prune", # WHY: Pruning simplifies navigation by hiding irrelevant sections based on the current page.
+    "navigation.indexes", # WHY: Indexes provide an overview of the documentation structure and allow for quick access to different sections.
+    "toc.follow", # WHY: Following the table of contents enhances user experience by keeping the navigation in sync with the current page.
+    "toc.integrate", # WHY: Integrating the table of contents into the navigation provides a more cohesive and user-friendly interface.
+    "navigation.top",# WHY: A "Back to top" button improves usability by allowing users to quickly return to the top of the page.
+ ]
+
+# ------------------------------------------------------------
+# Navigation (Modify as needed; see Zensical docs for details)
+# ------------------------------------------------------------
+# Folder-based navigation is an optional alternative.
+
+nav = [
+    { "Home" = "index.md" },
+]

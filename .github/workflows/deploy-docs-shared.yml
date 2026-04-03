@@ -1,0 +1,21 @@
+# ============================================================
+# .github/workflows/deploy-mkdocs-shared.yml (Deploy Docs)
+# ============================================================
+# WHY: Calls org-level deploy;
+# maintained centrally in toy-gpt/.github.
+
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write   # WHY: Required by deploy-pages for OIDC; must be declared in caller.
+
+jobs:
+  deploy:
+    uses: toy-gpt/.github/.github/workflows/deploy-zensical.yml@main
