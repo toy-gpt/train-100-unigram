@@ -76,8 +76,8 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
   - **MAJOR** – breaking schema/OpenAPI changes
   - **MINOR** – backward-compatible additions
   - **PATCH** – clarifications, docs, tooling
-- Versions are driven by git tags via `setuptools_scm`. Tag `vX.Y.Z` to release.
-- Docs are deployed per version tag and aliased to **latest**.
+- Versions are driven by git tags. Tag `vX.Y.Z` to release.
+- Docs are deployed automatically on each version tag.
 - Sample commands:
 
 ```shell

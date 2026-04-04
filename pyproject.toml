@@ -9,7 +9,7 @@
 name = "toy-gpt-train-100-unigram" # CUSTOM: Package distribution name (use lowercase and dashes).
 readme = "README.md"
 requires-python = ">=3.14"
-dynamic = ["version"] # WHY: Version is managed with scm and source control tags.
+dynamic = ["version"] # WHY: Version is managed with build tools
 
 # CUSTOM: Project metadata.
 authors = [{ name = "Denise Case", email = "dcase@nwmissouri.edu" }]
@@ -187,44 +187,43 @@ force-sort-within-sections = true
 # REQ: Google style is the default policy for this repository.
 convention = "google"
 
-# === BUILD SYSTEM ===
+# === BUILD SYSTEM (PYPI RELEASE) ===
 #
 # REQ.PROJECT:
-#   This project MUST define a build system so that local Python modules
-#   can be discovered and imported reliably.
+#   This project MUST define a build system so that Python modules
+#   can be discovered, imported, and published to PyPI reliably.
 #
 # WHY:
-#   Although this project is not published to PyPI, tools such as editors,
-#   test runners, and CI need a consistent way to locate importable code.
+#   Tools such as editors, test runners, CI, and PyPI need a consistent
+#   way to locate and package importable code.
 #
 # REQ.STRUCTURE:
 #   All importable Python code MUST live under src/.
 #
 # WHY:
 #   A src/ layout prevents accidental imports from the repository root and
-#   ensures consistent behavior across IDEs, tests, and command-line runs.
+#   ensures consistent behavior across IDEs, tests, command-line runs,
+#   and published distributions.
 
 [build-system]
-# REQ.BUILD: A build backend MUST be declared to enable package discovery.
-build-backend = "setuptools.build_meta"
-requires = [
-    "setuptools>=80.9.0",
-    "setuptools-scm>=9.2.2"
-]
+# REQ.BUILD: A build backend MUST be declared to enable package discovery and publishing.
+build-backend = "hatchling.build"
+requires = ["hatchling", "hatch-vcs"]
 
-[tool.setuptools]
+[tool.hatch.build.targets.wheel]
 # REQ.PACKAGES: Package discovery MUST be rooted at src/.
-package-dir = { "" = "src" }
+packages = ["src/toy_gpt_train"]
 
-[tool.setuptools.packages.find]
-# WHY: Explicitly define package discovery location.
-where = ["src"]
+[tool.hatch.version]
+# WHY: Version is derived from git tags at build time so the package version
+# always matches the release tag without manual updates to source files.
+# fallback-version is used when no git tags are present (e.g., fresh clone, CI without tags).
+# tag-pattern matches tags like v1.2.3 or 1.2.3 and extracts the numeric version.
+source = "vcs"
+fallback-version = "0.1.0"
+tag-pattern = "^(?:v)?(?P<version>\\d+\\.\\d+\\.\\d+)$"
 
-[tool.setuptools_scm]
-# WHY: If someone builds from a source tree without git metadata,
-# this prevents failure and keeps a sensible placeholder.
-fallback_version = "0.1.0"
-# Optional, but recommended: write the computed version into package at build time.
-# Can be read at runtime, without importing setuptools_scm.
-version_file = "src/toy_gpt_train/_version.py" # CUSTOM: Match package name.
-tag_regex = "^(?:v)?(?P<version>\\d+\\.\\d+\\.\\d+)$" # CUSTOM: Match version tag scheme.
+[tool.hatch.build.hooks.vcs]
+# WHY: Writes computed version into package at build time.
+# Can be read at runtime without importing hatch-vcs.
+version-file = "src/toy_gpt_train/_version.py"

@@ -1,171 +1,20 @@
 # ============================================================
-# .github/workflows/release-pypi-mkdocs-shared.yml
-# (Release PyPI + versioned docs via mike using shared MkDocs config)
+# .github/workflows/release-pypi.yml
 # ============================================================
-# SOURCE: https://github.com/denisecase/templates
-# OBS: Fetches shared MkDocs base config at run time (network dependency).
-# REQ: The referenced raw URL must remain public/accessible to GitHub Actions.
-# WHY: Keeps documentation theming/config consistent across org repositories.
+# WHY: Calls org-level deploy;
+# maintained centrally in toy-gpt/.github.
 
-# WHY-FILE: Build and deploy documentation to GitHub Pages on pushes to main.
-# REQ: Repo Settings -> Pages -> Build and deployment -> Source:
-#      GitHub Actions
-
-name: Release (PyPI + versioned docs via mike using shared config)
-
-# WHY: Publish a tagged release to PyPI and deploy versioned docs using mike.
-# REQ: Trigger ONLY on version tags like v1.2.3.
-# REQ: PyPI project must be configured for Trusted Publishing (OIDC).
-# REQ: mike requires a gh-pages branch (mike writes versioned docs there).
-# REQ: uv build must run before anything that modifies the working tree (including uv sync).
+name: Release PyPI
 
 on:
   push:
     tags:
-      - "v*.*.*" # WHY: Trigger on version tags like 'vx.y.z'.
+      - "v*.*.*"
 
-permissions: # WHY: Use least privileges required.
-  contents: write # WHY: Create GitHub Release + push gh-pages for mike
-  id-token: write # WHY: PyPI Trusted Publishing (OIDC)
-
-env:
-  PYTHONUNBUFFERED: "1" # WHY: Real-time logging.
-  PYTHONIOENCODING: "utf-8" # WHY: Ensure UTF-8 encoding so docs with international characters work.
-
-concurrency:
-  # WHY: Prevent concurrent releases; wait for previous to complete.
-  group: release-${{ github.ref }}
-  cancel-in-progress: false  # WHY: Never cancel a release in progress
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30 # WHY: Prevent hanging jobs. If over, it is likely stuck.
-    environment: pypi # WHY: Use 'pypi' environment for PyPI publishing; ignore warnings.
-
-    steps:
-          # === ASSEMBLE ===
-
-          - name: A1) Checkout repository with full history and tags
-            uses: actions/checkout@v6
-            with:
-              fetch-depth: 0
-              fetch-tags: true
-              ref: ${{ github.ref }}
-
-          - name: A2) Install uv (with caching)
-            uses: astral-sh/setup-uv@v7
-            with:
-              enable-cache: true
-
-          - name: A3) Setup Python 3.14 (builds packages)
-            # WHY: Ensure consistent Python version for release.
-            uses: actions/setup-python@v6
-            with:
-              python-version: "3.14"
-
-          - name: A4) Display versions
-            # WHY: Confirm correct versions are in use.
-            run: |
-              python --version
-              uv --version
-
-          # === BASELINE CHECKS (build while git is pristine) ===
-
-          - name: B1) Extract plain version from tag (no leading 'v')
-            id: ver
-            shell: bash
-            run: echo "plain=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-
-          - name: B2) Verify git is clean before build
-            run: |
-              echo "Git status:"
-              git status --short
-              echo "Git describe:"
-              git describe --tags --always --dirty
-              if [[ $(git status --porcelain) ]]; then
-                echo "ERROR: Git tree is dirty before build!"
-                exit 1
-              fi
-
-          - name: B3) Build sdist + wheel
-            run: uv build
-
-          - name: B4) Ensure built artifact version matches tag
-            shell: bash
-            run: |
-              set -e
-              TAG="${{ steps.ver.outputs.plain }}"
-              echo "Tag version: $TAG"
-              ls dist
-              if ! ls dist/*"$TAG"*.whl dist/*"$TAG"*.tar.gz >/dev/null 2>&1; then
-                echo "ERROR: Built artifact version does not match tag $TAG"
-                exit 1
-              fi
-              echo "Artifact version matches tag."
-
-          # === CHECKS and INSTALL DEPS (after build, may modify working tree) ===
-
-          - name: C1) Sync to install all dependencies
-            run: uv sync --extra dev --extra docs --upgrade
-
-          - name: C2) Ruff format (check only)
-            run: uv run ruff format --check .
-
-          - name: C3) Ruff lint (no fixes)
-            run: uv run ruff check .
-
-          - name: C4) Validate pyproject.toml
-            run: uvx validate-pyproject
-
-          - name: C5) Pyright (type check)
-            run: uv run pyright
-
-          - name: C6) Deptry (dependency check)
-            run: uvx deptry .
-
-          - name: C7) Validate built artifacts
-            run: uv run twine check dist/*
-
-          # === DEPLOY RELEASE AND DOCS ===
-
-          - name: D1) Fetch organization MkDocs base config
-            run: curl --fail -o mkdocs.base.yaml https://raw.githubusercontent.com/toy-gpt/.github/refs/heads/main/docs-theme/mkdocs.base.yaml
-
-          - name: D2) Build docs (validate before deploy)
-            run: uv run mkdocs build --strict
-
-          - name: D3) Create GitHub Release and upload artifacts
-            uses: softprops/action-gh-release@v2
-            with:
-              tag_name: ${{ github.ref_name }}
-              name: ${{ github.ref_name }}
-              generate_release_notes: true
-              files: |
-                dist/*.whl
-                dist/*.tar.gz
-              draft: false
-              prerelease: false
-              make_latest: true
-
-          - name: D4) Publish to PyPI (Trusted Publishing)
-            uses: pypa/gh-action-pypi-publish@release/v1
-
-          # === DOCS (modifies working tree - must be after build) ===
-
-          - name: D5) Configure git identity for mike
-            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-            run: |
-              git config user.name "github-actions[bot]"
-              git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          - name: D6) Deploy docs for this version and update latest alias
-            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-            run: |
-              VERSION="${{ steps.ver.outputs.plain }}"
-              uv run mike deploy --push --update-aliases "$VERSION" latest
-              uv run mike set-default --push latest
-
-          - name: D7) Show mike versions
-            if: hashFiles('mkdocs.yml', 'mkdocs.yaml') != ''
-            run: uv run mike list
+  release:
+    uses: toy-gpt/.github/.github/workflows/release-pypi-shared.yml@main
